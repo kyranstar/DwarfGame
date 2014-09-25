@@ -24,7 +24,6 @@ public class GameDisplay extends JLayeredPane {
 				displayHighlighter.getPreferredSize().height);
 
 		final JConsole jc = new JConsole(widthInChars / 4, heightInChars);
-		jc.setBackground(Color.RED);
 		jc.write("Hello World\n");
 		jc.write("Hello World\n", Color.BLACK, Color.MAGENTA);
 		jc.write("Hello World\n", Color.GREEN, Color.BLACK);
@@ -40,9 +39,9 @@ public class GameDisplay extends JLayeredPane {
 		this.add(backgroundPanel, new Integer(0));
 		this.add(displayHighlighter, new Integer(1));
 
-		setPreferredSize(new Dimension(asciiPanel.getPreferredSize().width
-				+ jc.getPreferredSize().width,
-				asciiPanel.getPreferredSize().height));
+		setPreferredSize(new Dimension(
+				backgroundPanel.getPreferredSize().width,
+				backgroundPanel.getPreferredSize().height));
 	}
 
 	public AsciiPanel getAsciiPanel() {

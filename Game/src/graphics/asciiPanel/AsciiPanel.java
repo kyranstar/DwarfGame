@@ -329,7 +329,7 @@ public class AsciiPanel extends JPanel {
 			for (int y = 0; y < heightInCharacters; y++) {
 				if (oldBackgroundColors[x][y] == backgroundColors[x][y]
 						&& oldForegroundColors[x][y] == foregroundColors[x][y]
-						&& oldChars[x][y] == chars[x][y]) {
+								&& oldChars[x][y] == chars[x][y]) {
 					continue;
 				}
 

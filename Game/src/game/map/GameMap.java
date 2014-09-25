@@ -72,7 +72,6 @@ public class GameMap {
 
 	public void draw(final Display display) {
 
-		display.clearLayer(DrawingLayer.BACKGROUND);
 		for (int x = getViewportX(); x < getViewportX() + viewportWidthInTiles; x++) {
 			for (int y = viewportY; y < viewportY + viewportHeightInTiles; y++) {
 				final char character = background[x][y].getCharacter();

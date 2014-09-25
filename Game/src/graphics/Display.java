@@ -61,7 +61,9 @@ public class Display {
 				}
 			}
 			// if there were no non trasparent characters
-			displayPanel.write(TRANSPARENT_CHARACTER, x, y);
+			displayPanel.write(TRANSPARENT_CHARACTER, x, y,
+					displayPanel.getDefaultForegroundColor(),
+					displayPanel.getDefaultBackgroundColor());
 			// if we are a highlighter, we draw the below character and then
 			// just draw on top
 		} else {
