@@ -24,7 +24,7 @@ public class JConsole extends JComponent implements HierarchyListener {
 	private static final Color DEFAULT_FOREGROUND = Color.LIGHT_GRAY;
 	private static final Color DEFAULT_BACKGROUND = Color.BLACK;
 	private static final Font DEFAULT_FONT = new Font("Courier New",
-			Font.PLAIN, 18);
+			Font.PLAIN, 14);
 	private static final int DEFAULT_BLINKRATE = 200;
 	private static final boolean DEFAULT_BLINK_ON = true;
 
@@ -102,7 +102,7 @@ public class JConsole extends JComponent implements HierarchyListener {
 	}
 
 	private void startBlinking() {
-		getTimer().start();
+		// getTimer().start();
 	}
 
 	public void setCursorBlink(final boolean blink) {
@@ -362,9 +362,15 @@ public class JConsole extends JComponent implements HierarchyListener {
 	}
 
 	public void write(final char c) {
+		// if (c == '\n') {
+		// while (cursorX != 0 && cursorX < getColumns()) {
+		// write(' ');
+		// }
+		// } else {
 		data.setDataAt(cursorX, cursorY, c, currentForeground,
 				currentBackground, currentFont);
 		moveCursor(c);
+		// }
 	}
 
 	private void moveCursor(final char c) {

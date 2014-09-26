@@ -1,10 +1,9 @@
 package graphics;
 
 import graphics.asciiPanel.AsciiPanel;
-import graphics.console.JConsole;
+import graphics.console.Console;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JLayeredPane;
@@ -14,6 +13,7 @@ public class GameDisplay extends JLayeredPane {
 	private static final long serialVersionUID = 1L;
 	private final AsciiPanel asciiPanel;
 	private final DisplayHighlighter displayHighlighter;
+	private final Console console;
 
 	public GameDisplay(final int widthInChars, final int heightInChars) {
 		asciiPanel = new AsciiPanel(widthInChars, heightInChars);
@@ -22,16 +22,19 @@ public class GameDisplay extends JLayeredPane {
 		displayHighlighter.setBounds(0, 0,
 				displayHighlighter.getPreferredSize().width,
 				displayHighlighter.getPreferredSize().height);
+		console = new Console(widthInChars / 4, heightInChars);
 
-		final JConsole jc = new JConsole(widthInChars / 4, heightInChars);
-		jc.write("Hello World\n");
-		jc.write("Hello World\n", Color.BLACK, Color.MAGENTA);
-		jc.write("Hello World\n", Color.GREEN, Color.BLACK);
+		console.write("Hello World\n");
+		console.write("Hello World\n");
+		console.write("Hello World\n");
+		for (int i = 0; i < 45; i++) {
+			console.write(i + "\n");
+		}
 
 		final JPanel backgroundPanel = new JPanel();
 		backgroundPanel.setLayout(new BorderLayout());
 		backgroundPanel.add(asciiPanel, BorderLayout.WEST);
-		backgroundPanel.add(jc, BorderLayout.EAST);
+		backgroundPanel.add(console.scrollPane, BorderLayout.EAST);
 		backgroundPanel.setBounds(0, 0,
 				backgroundPanel.getPreferredSize().width,
 				backgroundPanel.getPreferredSize().height);
@@ -50,5 +53,9 @@ public class GameDisplay extends JLayeredPane {
 
 	public DisplayHighlighter getDisplayHighlighter() {
 		return displayHighlighter;
+	}
+
+	public Console getConsole() {
+		return console;
 	}
 }

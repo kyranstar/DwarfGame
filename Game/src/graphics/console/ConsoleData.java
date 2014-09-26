@@ -49,8 +49,12 @@ public final class ConsoleData {
 	/**
 	 * Sets a single character position
 	 */
-	public void setDataAt(final int column, final int row, final char c,
+	public void setDataAt(final int column, int row, final char c,
 			final Color fg, final Color bg, final Font f) {
+		if (row >= rows) {
+			row = rows - 1;
+			System.arraycopy(text, columns, text, 0, text.length - columns);
+		}
 		final int pos = column + row * columns;
 		text[pos] = c;
 		foreground[pos] = fg;

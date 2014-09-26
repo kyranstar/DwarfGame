@@ -32,8 +32,8 @@ public class Game extends GameLoop {
 
 		map = new TerrainGenerator().generate(new GameMap(
 				display.getWidth() * 2, display.getHeight() * 2, gameDisplay
-						.getAsciiPanel().getWidthInCharacters(), gameDisplay
-						.getAsciiPanel().getHeightInCharacters()));
+				.getAsciiPanel().getWidthInCharacters(), gameDisplay
+				.getAsciiPanel().getHeightInCharacters()));
 		Dwarf d = DwarfFactory.generateRandomDwarf();
 		d.setX(10);
 		map.addEntity(d);
