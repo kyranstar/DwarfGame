@@ -22,14 +22,9 @@ public class GameDisplay extends JLayeredPane {
 		displayHighlighter.setBounds(0, 0,
 				displayHighlighter.getPreferredSize().width,
 				displayHighlighter.getPreferredSize().height);
-		console = new Console(widthInChars / 4, heightInChars);
-
-		console.write("Hello World\n");
-		console.write("Hello World\n");
-		console.write("Hello World\n");
-		for (int i = 0; i < 45; i++) {
-			console.write(i + "\n");
-		}
+		console = new Console(new Dimension(
+				asciiPanel.getPreferredSize().width / 4,
+				asciiPanel.getPreferredSize().height));
 
 		final JPanel backgroundPanel = new JPanel();
 		backgroundPanel.setLayout(new BorderLayout());
