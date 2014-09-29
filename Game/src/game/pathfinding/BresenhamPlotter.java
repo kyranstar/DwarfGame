@@ -1,10 +1,22 @@
 package game.pathfinding;
 
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class BresenhamPlotter.
+ */
 public class BresenhamPlotter {
 	
+	/**
+	 * The Interface BresenhamPlotFunction.
+	 */
 	public interface BresenhamPlotFunction {
+
 		/**
-		 * Plot function, pass it into a plotting algorithm
+		 * Plot function, pass it into a plotting algorithm.
 		 *
 		 * @param x
 		 *            the x position
@@ -12,11 +24,11 @@ public class BresenhamPlotter {
 		 *            the y position
 		 * @return True to continue, false to stop the algorithm early
 		 */
-		public boolean plotFunction(int x, int y);
+		public void plotFunction(int x, int y);
 	}
-
+	
 	/**
-	 * Line.
+	 * Plots a line using the Bresenham line algorithm from (x0, y0) to (x1, y1) and plots each point using the plot function.
 	 *
 	 * @param x0
 	 *            the start x
@@ -29,39 +41,110 @@ public class BresenhamPlotter {
 	 * @param plot
 	 *            the plot function
 	 */
-	public static void Line(int x0, int y0, int x1, int y1, final BresenhamPlotFunction plot) {
-		final boolean steep = Math.abs(y1 - y0) > Math.abs(x1 - x0);
-		if (steep) {
-			final int temp0 = x0;
-			x0 = y0;
-			y0 = temp0;
-			
-			final int temp1 = x1;
-			x1 = y1;
-			y1 = temp1;
+	public static void Line(int x0, int y0, final int x1, final int y1, final BresenhamPlotFunction plot) {
+		final int w = x1 - x0;
+		final int h = y1 - y0;
+		int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0;
+		if (w < 0) {
+			dx1 = -1;
+		} else if (w > 0) {
+			dx1 = 1;
 		}
-		if (x0 > x1) {
-			final int tempX = x0;
-			x0 = x1;
-			x1 = tempX;
-
-			final int tempY = y0;
-			y0 = y1;
-			y1 = tempY;
+		if (h < 0) {
+			dy1 = -1;
+		} else if (h > 0) {
+			dy1 = 1;
 		}
-		final int dX = x1 - x0, dY = Math.abs(y1 - y0);
-		int err = dX / 2;
-		final int ystep = y0 < y1 ? 1 : -1;
-		int y = y0;
-		
-		for (int x = x0; x <= x1; ++x) {
-			if (!(steep ? plot.plotFunction(x, y) : plot.plotFunction(x, y)))
-				return;
-			err = err - dY;
-			if (err < 0) {
-				y += ystep;
-				err += dX;
+		if (w < 0) {
+			dx2 = -1;
+		} else if (w > 0) {
+			dx2 = 1;
+		}
+		int longest = Math.abs(w);
+		int shortest = Math.abs(h);
+		if (!(longest > shortest)) {
+			longest = Math.abs(h);
+			shortest = Math.abs(w);
+			if (h < 0) {
+				dy2 = -1;
+			} else if (h > 0) {
+				dy2 = 1;
+			}
+			dx2 = 0;
+		}
+		int numerator = longest >> 1;
+		for (int i = 0; i <= longest; i++) {
+			plot.plotFunction(x0, y0);
+			numerator += shortest;
+			if (!(numerator < longest)) {
+				numerator -= longest;
+				x0 += dx1;
+				y0 += dy1;
+			} else {
+				x0 += dx2;
+				y0 += dy2;
 			}
 		}
+	}
+
+	/**
+	 * Plots a line using the Bresenham line algorithm from (x0, y0) to (x1, y1) and returns a list of the points.
+	 *
+	 * @param x0
+	 *            the start x
+	 * @param y0
+	 *            the start y
+	 * @param x1
+	 *            the end x
+	 * @param y1
+	 *            the end y
+	 * @return the list of plotted points
+	 */
+	public static List<Point> Line(int x0, int y0, final int x1, final int y1) {
+		final List<Point> points = new ArrayList<>();
+		final int w = x1 - x0;
+		final int h = y1 - y0;
+		int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0;
+		if (w < 0) {
+			dx1 = -1;
+		} else if (w > 0) {
+			dx1 = 1;
+		}
+		if (h < 0) {
+			dy1 = -1;
+		} else if (h > 0) {
+			dy1 = 1;
+		}
+		if (w < 0) {
+			dx2 = -1;
+		} else if (w > 0) {
+			dx2 = 1;
+		}
+		int longest = Math.abs(w);
+		int shortest = Math.abs(h);
+		if (!(longest > shortest)) {
+			longest = Math.abs(h);
+			shortest = Math.abs(w);
+			if (h < 0) {
+				dy2 = -1;
+			} else if (h > 0) {
+				dy2 = 1;
+			}
+			dx2 = 0;
+		}
+		int numerator = longest >> 1;
+		for (int i = 0; i <= longest; i++) {
+			points.add(new Point(x0, y0));
+			numerator += shortest;
+			if (!(numerator < longest)) {
+				numerator -= longest;
+				x0 += dx1;
+				y0 += dy1;
+			} else {
+				x0 += dx2;
+				y0 += dy2;
+			}
+		}
+		return points;
 	}
 }

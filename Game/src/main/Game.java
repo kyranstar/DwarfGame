@@ -4,6 +4,7 @@ import game.entity.Dwarf;
 import game.entity.DwarfFactory;
 import game.map.GameMap;
 import game.map.generators.TerrainGenerator;
+import game.pathfinding.BresenhamPlotter;
 import graphics.Display;
 import graphics.DisplayHighlighter;
 import graphics.GameDisplay;
@@ -44,6 +45,8 @@ public class Game extends GameLoop {
 		d = DwarfFactory.generateRandomDwarf();
 		d.setX(40);
 		map.addEntity(d);
+		
+		BresenhamPlotter.Line(3, 0, 3, 5, (x, y) -> highlighter.highlightTile(DisplayHighlighter.createBlinker(x, y, 50)));
 	}
 	
 	@Override
