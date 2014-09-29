@@ -4,25 +4,22 @@ package game.pathfinding;
 
 import java.util.Collection;
 import java.util.List;
-
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 /**
- * An interface implemented by classes that provide a mechanism to find routes
- * between nodes.
+ * An interface implemented by classes that provide a mechanism to find routes between nodes.
  *
- * When the path has been found or all possible paths have been exhausted, a
- * {@link PathEvent} will be sent.
+ * When the path has been found or all possible paths have been exhausted, a {@link PathEvent} will be sent.
  *
  * @author Gene McCulley
  */
 public interface PathFinder<T extends Node<?>> {
-
+	
 	/**
 	 * Cancels the execution.
 	 */
 	void cancel();
-
+	
 	/**
 	 * Find a path between the start and the goal {@link Node}s.
 	 *
@@ -32,13 +29,10 @@ public interface PathFinder<T extends Node<?>> {
 	 *            the starting @{link Node}
 	 * @param goals
 	 *            the goal @{link Node}s
-	 * @return a {@link com.google.common.base.Optional} of
-	 *         {@link java.util.List} of {@link Node} elements or an empty
-	 *         optional if no path was found.
+	 * @return a {@link com.google.common.base.Optional} of {@link java.util.List} of {@link Node} elements or an empty optional if no path was found.
 	 */
-	public Optional<List<T>> findPath(Collection<T> graph, T start,
-			Collection<T> goals);
-
+	public Optional<List<T>> findPath(Collection<T> graph, T start, Collection<T> goals);
+	
 	/**
 	 * Find a path between the start and the goal {@link Node}s.
 	 *
@@ -48,12 +42,10 @@ public interface PathFinder<T extends Node<?>> {
 	 *            the starting @{link Node}
 	 * @param goal
 	 *            the goal @{link Node}s
-	 * @return a {@link com.google.common.base.Optional} of
-	 *         {@link java.util.List} of {@link Node} elements or an empty
-	 *         optional if no path was found.
+	 * @return a {@link com.google.common.base.Optional} of {@link java.util.List} of {@link Node} elements or an empty optional if no path was found.
 	 */
 	public Optional<List<T>> findPath(Collection<T> graph, T start, T goal);
-
+	
 	/**
 	 * Add a listener for {@link PathEvent}s.
 	 *
@@ -61,7 +53,7 @@ public interface PathFinder<T extends Node<?>> {
 	 *            the listener to add.
 	 */
 	void addPathListener(PathListener<T> l);
-
+	
 	/**
 	 * Remove a listener for {@link PathEvent}s.
 	 *
@@ -69,5 +61,5 @@ public interface PathFinder<T extends Node<?>> {
 	 *            the listener to remove.
 	 */
 	void removePathListener(PathListener<T> l);
-
+	
 }

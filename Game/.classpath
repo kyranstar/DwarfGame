@@ -2,12 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry excluding="src/|res/" kind="src" path=""/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry excluding="namegenerators/|namegenerators/" kind="src" path="res"/>
-	<classpathentry kind="lib" path="C:/Users/Kyran Adams/Desktop/Coding Stuff/Java/EclipseWorkspace/guava-17.0 (1).jar" sourcepath="D:/workspace/blacken-1.1.1.zip">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/D:/workspace/blacken-core-1.1.1-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Kyran Adams/Desktop/Coding Stuff/Java/EclipseWorkspace/guava-17.0 (1).jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -7,8 +7,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
 
 /**
@@ -23,15 +23,13 @@ public class AStar<T extends Node<T>> extends AbstractPathFinder<T> {
 		private final double costFromStart;
 		private final double costToGoal;
 
-		private State(final T node, final double costFromStart,
-				final State parent, final Collection<T> goals) {
+		private State(final T node, final double costFromStart, final State parent, final Collection<T> goals) {
 			super(node, parent);
 			this.costFromStart = costFromStart;
 			costToGoal = minimumPathCostEstimate(node, goals);
 		}
 
-		private double minimumPathCostEstimate(final T node,
-				final Collection<T> goals) {
+		private double minimumPathCostEstimate(final T node, final Collection<T> goals) {
 			double min = Double.MAX_VALUE;
 			for (final T goal : goals) {
 				final double cost = node.pathCostEstimate(goal);
@@ -55,14 +53,12 @@ public class AStar<T extends Node<T>> extends AbstractPathFinder<T> {
 	}
 
 	@Override
-	public Optional<List<T>> findPath(final Collection<T> graph, final T start,
-			final T goal) {
+	public Optional<List<T>> findPath(final Collection<T> graph, final T start, final T goal) {
 		return findPath(graph, start, Collections.singleton(goal));
 	}
 
 	@Override
-	public Optional<List<T>> findPath(final Collection<T> graph, final T start,
-			final Collection<T> goals) {
+	public Optional<List<T>> findPath(final Collection<T> graph, final T start, final Collection<T> goals) {
 		canceled = false;
 		final Map<T, State> open = new HashMap<T, State>();
 		final Map<T, State> closed = new HashMap<T, State>();
@@ -70,8 +66,7 @@ public class AStar<T extends Node<T>> extends AbstractPathFinder<T> {
 		open.put(start, startState);
 		final Ordering<Map.Entry<T, State>> orderByEntryValue = orderByEntryValue();
 		while (!(open.isEmpty() || canceled)) {
-			final State state = open.remove(orderByEntryValue.min(
-					open.entrySet()).getKey());
+			final State state = open.remove(orderByEntryValue.min(open.entrySet()).getKey());
 			fireConsidered(new PathEvent<T>(this) {
 
 				private static final long serialVersionUID = 1L;
@@ -86,16 +81,14 @@ public class AStar<T extends Node<T>> extends AbstractPathFinder<T> {
 				return Optional.of(state.makePath());
 			else {
 				for (final T newNode : state.node.neighbors()) {
-					final double newCost = state.costFromStart
-							+ state.node.traverseCost(newNode);
+					final double newCost = state.costFromStart + state.node.traverseCost(newNode);
 					final State openNode = open.get(newNode);
 					if (openNode != null && openNode.costFromStart <= newCost) {
 						continue;
 					}
 
 					final State closedNode = closed.get(newNode);
-					if (closedNode != null
-							&& closedNode.costFromStart <= newCost) {
+					if (closedNode != null && closedNode.costFromStart <= newCost) {
 						continue;
 					}
 
@@ -107,8 +100,7 @@ public class AStar<T extends Node<T>> extends AbstractPathFinder<T> {
 						open.remove(newNode);
 					}
 
-					final State newState = new State(newNode, newCost, state,
-							goals);
+					final State newState = new State(newNode, newCost, state, goals);
 					open.put(newNode, newState);
 				}
 			}
@@ -116,15 +108,14 @@ public class AStar<T extends Node<T>> extends AbstractPathFinder<T> {
 			closed.put(state.node, state);
 		}
 
-		return Optional.absent();
+		return Optional.empty();
 	}
 
 	static private <K, V extends Comparable<V>> Ordering<Map.Entry<K, V>> orderByEntryValue() {
 		return new Ordering<Map.Entry<K, V>>() {
 
 			@Override
-			public int compare(final Map.Entry<K, V> o1,
-					final Map.Entry<K, V> o2) {
+			public int compare(final Map.Entry<K, V> o1, final Map.Entry<K, V> o2) {
 				return o1.getValue().compareTo(o2.getValue());
 			}
 

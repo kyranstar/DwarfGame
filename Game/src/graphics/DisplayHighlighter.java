@@ -6,10 +6,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.swing.JPanel;
-
-import com.google.common.base.Optional;
 
 public class DisplayHighlighter extends JPanel {
 
@@ -28,7 +27,7 @@ public class DisplayHighlighter extends JPanel {
 		setOpaque(false);
 		for (int x = 0; x < widthInChars; x++) {
 			for (int y = 0; y < heightInChars; y++) {
-				tiles[x][y] = Optional.absent();
+				tiles[x][y] = Optional.empty();
 			}
 		}
 	}
@@ -50,7 +49,7 @@ public class DisplayHighlighter extends JPanel {
 			if (h.isOn) {
 				tiles[h.x][h.y] = Optional.of(h.c);
 			} else {
-				tiles[h.x][h.y] = Optional.absent();
+				tiles[h.x][h.y] = Optional.empty();
 			}
 		}
 	}
@@ -62,17 +61,13 @@ public class DisplayHighlighter extends JPanel {
 			for (int y = 0; y < tiles[0].length; y++) {
 				if (tiles[x][y].isPresent()) {
 					g.setColor(tiles[x][y].get());
-					g.fillRect((x - viewportX) * AsciiPanel.getCharWidth(),
-							(y - viewportY) * AsciiPanel.getCharHeight(),
-							AsciiPanel.getCharWidth(),
-							AsciiPanel.getCharHeight());
+					g.fillRect((x - viewportX) * AsciiPanel.getCharWidth(), (y - viewportY) * AsciiPanel.getCharHeight(), AsciiPanel.getCharWidth(), AsciiPanel.getCharHeight());
 				}
 			}
 		}
 	}
 
-	public static Highlight createBlinker(final int x, final int y,
-			final int blinkTime) {
+	public static Highlight createBlinker(final int x, final int y, final int blinkTime) {
 		final Highlight h = new Highlight();
 		h.x = x;
 		h.y = y;
@@ -95,7 +90,7 @@ public class DisplayHighlighter extends JPanel {
 	}
 
 	public void unhighlightTile(final int x, final int y) {
-		tiles[x][y] = Optional.absent();
+		tiles[x][y] = Optional.empty();
 		for (int i = highlighters.size(); i >= 0; i--) {
 			final Highlight h = highlighters.get(i);
 			if (h.x == x && h.y == y) {
