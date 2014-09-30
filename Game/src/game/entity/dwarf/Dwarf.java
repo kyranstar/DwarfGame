@@ -1,4 +1,8 @@
-package game.entity;
+package game.entity.dwarf;
+
+import game.entity.Entity;
+
+import java.awt.Color;
 
 public class Dwarf extends Entity {
 	private String firstName;
@@ -10,6 +14,21 @@ public class Dwarf extends Entity {
 	// Package private, only factories in package can create
 	Dwarf() {
 
+	}
+
+	@Override
+	public char getCharacter() {
+		return firstName.charAt(0);
+	}
+	
+	@Override
+	public Color getForeground() {
+		return Color.BLACK;
+	}
+	
+	@Override
+	public Color getBackground() {
+		return Color.WHITE;
 	}
 
 	public String getWholeName() {
