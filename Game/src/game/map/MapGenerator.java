@@ -1,5 +1,5 @@
 package game.map;
 
-public interface MapGenerator {
-	public GameMap generate(GameMap map);
+public interface MapGenerator<T> {
+	public T[][] generate(int width, int height);
 }
