@@ -10,11 +10,7 @@ import java.util.List;
  */
 public class BresenhamPlotter {
 	
-	/**
-	 * The Interface BresenhamPlotFunction.
-	 */
 	public interface BresenhamPlotFunction {
-
 		/**
 		 * Plot function, pass it into a plotting algorithm.
 		 *
@@ -22,11 +18,10 @@ public class BresenhamPlotter {
 		 *            the x position
 		 * @param y
 		 *            the y position
-		 * @return True to continue, false to stop the algorithm early
 		 */
 		public void plotFunction(int x, int y);
 	}
-	
+
 	/**
 	 * Plots a line using the Bresenham line algorithm from (x0, y0) to (x1, y1) and plots each point using the plot function.
 	 *

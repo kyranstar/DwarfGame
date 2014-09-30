@@ -1,10 +1,9 @@
 package main;
 
-import game.entity.Dwarf;
-import game.entity.DwarfFactory;
+import game.entity.dwarf.Dwarf;
+import game.entity.dwarf.DwarfFactory;
 import game.map.GameMap;
 import game.map.generators.TerrainGenerator;
-import game.pathfinding.BresenhamPlotter;
 import graphics.Display;
 import graphics.DisplayHighlighter;
 import graphics.GameDisplay;
@@ -15,24 +14,28 @@ import java.awt.event.MouseWheelEvent;
 import java.util.Queue;
 
 public class Game extends GameLoop {
-	
+
 	private final Display display;
 	private final GameMap map;
 	private final DisplayHighlighter highlighter;
-	
+
 	private static final int TARGET_FPS = 60;
-	
+
 	public Game(final GameDisplay gameDisplay) {
 		super(TARGET_FPS);
 		display = new Display(gameDisplay.getAsciiPanel());
 		highlighter = gameDisplay.getDisplayHighlighter();
-		
+
 		gameDisplay.setFocusable(true);
+		gameDisplay.requestFocus();
 		gameDisplay.addKeyListener(this);
 		gameDisplay.addMouseListener(this);
+
+		final TerrainGenerator gen = new TerrainGenerator();
 		
-		map = new TerrainGenerator().generate(new GameMap(display.getWidth() * 4, display.getHeight() * 4, gameDisplay.getAsciiPanel().getWidthInCharacters(), gameDisplay
-				.getAsciiPanel().getHeightInCharacters()));
+		map = gen.generate(new GameMap(display.getWidth() * 4, display.getHeight() * 4, gameDisplay.getAsciiPanel().getWidthInCharacters(), gameDisplay.getAsciiPanel()
+				.getHeightInCharacters()));
+		gameDisplay.getConsole().write("Seed: " + gen.getSeed());
 		Dwarf d = DwarfFactory.generateRandomDwarf();
 		d.setX(10);
 		map.addEntity(d);
@@ -45,10 +48,8 @@ public class Game extends GameLoop {
 		d = DwarfFactory.generateRandomDwarf();
 		d.setX(40);
 		map.addEntity(d);
-		
-		BresenhamPlotter.Line(3, 0, 3, 5, (x, y) -> highlighter.highlightTile(DisplayHighlighter.createBlinker(x, y, 50)));
 	}
-	
+
 	@Override
 	public void processInput(final Queue<KeyEvent> keyEvents, final Queue<MouseEvent> mouseEvent, final Queue<MouseWheelEvent> mouseWheelEvents) {
 		for (final KeyEvent e : keyEvents) {
@@ -70,15 +71,12 @@ public class Game extends GameLoop {
 			}
 		}
 	}
-	
-	int i = 0;
-	
+
 	@Override
 	public void update() {
-		i++;
-		highlighter.highlightTile(DisplayHighlighter.createBlinker(0, 0, 50));
+		
 	}
-	
+
 	@Override
 	public void draw() {
 		map.draw(display);

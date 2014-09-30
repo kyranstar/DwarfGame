@@ -7,10 +7,17 @@ import game.tiles.GroundTile;
 
 public class TerrainGenerator implements MapGenerator {
 
+	private long seed;
+	
+	public long getSeed() {
+		return seed;
+	}
+
 	@Override
 	public GameMap generate(final GameMap map) {
 
-		final SimplexNoise noise = new SimplexNoise(100, 0.5);
+		seed = System.currentTimeMillis();
+		final SimplexNoise noise = new SimplexNoise(100, 0.5, seed);
 
 		for (int i = 0; i < map.getWidth(); i++) {
 			for (int j = 0; j < map.getHeight(); j++) {
