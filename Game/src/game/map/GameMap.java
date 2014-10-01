@@ -17,6 +17,9 @@ import java.util.List;
 
 public class GameMap {
     private final Tile[][] background;
+    private final int[][] averageTemperature;
+    private final int[][] averagePercipitation;
+    private final double[][] waterLevel;
 
     List<Entity> entities = new ArrayList<>();
 
@@ -27,16 +30,19 @@ public class GameMap {
 
     public static final AbstractPathFinder<Tile> PATH_FINDER = new AStar<Tile>();
 
-    public GameMap(final int width, final int height,
-	    final int viewportWidthInTiles, final int viewportHeightInTiles) {
+    public GameMap(final int width, final int height, final int viewportWidthInTiles, final int viewportHeightInTiles) {
 
 	this.viewportWidthInTiles = viewportWidthInTiles;
 	this.viewportHeightInTiles = viewportHeightInTiles;
 
 	background = new Tile[width][height];
+	averageTemperature = new int[width][height];
+	averagePercipitation = new int[width][height];
+	waterLevel = new double[width][height];
 
 	for (int i = 0; i < width; i++) {
 	    for (int j = 0; j < height; j++) {
+		waterLevel[i][j] = 0.3f;
 		background[i][j] = new Tile(i, j, Displayable.NULL_DISPLAYABLE);
 	    }
 	}
@@ -77,10 +83,8 @@ public class GameMap {
 		final char character = background[x][y].getCharacter();
 		final Color foreground = background[x][y].getForeground();
 		final Color backgroundColor = background[x][y].getBackground();
-		final AsciiCharacterData data = new AsciiCharacterData(
-			character, foreground, backgroundColor);
-		display.setCharacterAt(x - getViewportX(), y - viewportY,
-			background[x][y].getDrawingLayer(), data);
+		final AsciiCharacterData data = new AsciiCharacterData(character, foreground, backgroundColor);
+		display.setCharacterAt(x - getViewportX(), y - viewportY, background[x][y].getDrawingLayer(), data);
 	    }
 	}
 	display.clearLayer(DrawingLayer.PRIMARY);
@@ -90,10 +94,8 @@ public class GameMap {
 	    final char character = e.getCharacter();
 	    final Color foreground = e.getForeground();
 	    final Color backgroundColor = e.getBackground();
-	    final AsciiCharacterData data = new AsciiCharacterData(character,
-		    foreground, backgroundColor);
-	    display.setCharacterAt(e.getX() - getViewportX(), e.getY()
-		    - viewportY, e.getDrawingLayer(), data);
+	    final AsciiCharacterData data = new AsciiCharacterData(character, foreground, backgroundColor);
+	    display.setCharacterAt(e.getX() - getViewportX(), e.getY() - viewportY, e.getDrawingLayer(), data);
 	}
 	display.repaint();
     }
@@ -110,8 +112,7 @@ public class GameMap {
 	background[x][y] = tile;
     }
 
-    public void setBackgroundTile(final int x, final int y,
-	    final Displayable displayable) {
+    public void setBackgroundTile(final int x, final int y, final Displayable displayable) {
 	final Tile t = new Tile(x, y, displayable);
 	attachNeighbors(t);
 	this.setBackgroundTile(x, y, t);
@@ -183,6 +184,14 @@ public class GameMap {
 
     public int mapTileYToDisplayTileY(final int i) {
 	return i - viewportY;
+    }
+
+    public void setAverageTemperature(final int x, final int y, final Integer avTemp) {
+	averageTemperature[x][y] = avTemp;
+    }
+
+    public void setAveragePercipitation(final int x, final int y, final Integer avPer) {
+	averagePercipitation[x][y] = avPer;
     }
 
 }

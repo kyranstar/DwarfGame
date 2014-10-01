@@ -3,8 +3,7 @@ package main;
 import game.entity.dwarf.Dwarf;
 import game.entity.dwarf.DwarfFactory;
 import game.map.GameMap;
-import game.map.generators.TerrainGenerator;
-import game.tiles.Displayable;
+import game.map.generators.GameMapCreator;
 import graphics.Display;
 import graphics.DisplayHighlighter;
 import graphics.GameDisplay;
@@ -20,6 +19,8 @@ public class Game extends GameLoop {
     private final GameMap map;
     private final DisplayHighlighter highlighter;
 
+    public static final long RAND_SEED = System.currentTimeMillis();
+
     private static final int TARGET_FPS = 60;
 
     public Game(final GameDisplay gameDisplay) {
@@ -27,25 +28,12 @@ public class Game extends GameLoop {
 	display = new Display(gameDisplay.getAsciiPanel());
 	highlighter = gameDisplay.getDisplayHighlighter();
 
-	gameDisplay.setFocusable(true);
-	gameDisplay.requestFocus();
 	gameDisplay.addKeyListener(this);
 	gameDisplay.addMouseListener(this);
 
-	final TerrainGenerator gen = new TerrainGenerator();
+	map = new GameMapCreator().createGameMap(display.getWidth() * 4, display.getHeight() * 4, gameDisplay);
 
-	map = new GameMap(display.getWidth() * 4, display.getHeight() * 4,
-		gameDisplay.getAsciiPanel().getWidthInCharacters(), gameDisplay
-		.getAsciiPanel().getHeightInCharacters());
-	final Displayable[][] tiles = gen.generate(map.getWidth(),
-		map.getHeight());
-	for (int x = 0; x < tiles.length; x++) {
-	    for (int y = 0; y < tiles[0].length; y++) {
-		map.setBackgroundTile(x, y, tiles[x][y]);
-	    }
-	}
-
-	gameDisplay.getConsole().writeln("Seed: " + gen.getSeed());
+	gameDisplay.getConsole().writeln("Seed: " + Game.RAND_SEED);
 	Dwarf d = DwarfFactory.generateRandomDwarf();
 	gameDisplay.getConsole().writeln(d.getWholeName());
 	d.setX(10);
@@ -65,9 +53,7 @@ public class Game extends GameLoop {
     }
 
     @Override
-    public void processInput(final Queue<KeyEvent> keyEvents,
-	    final Queue<MouseEvent> mouseEvent,
-	    final Queue<MouseWheelEvent> mouseWheelEvents) {
+    public void processInput(final Queue<KeyEvent> keyEvents, final Queue<MouseEvent> mouseEvent, final Queue<MouseWheelEvent> mouseWheelEvents) {
 	for (final KeyEvent e : keyEvents) {
 	    if (e instanceof KeyEvent) {
 		switch (e.getKeyCode()) {

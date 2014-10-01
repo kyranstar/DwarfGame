@@ -10,47 +10,42 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 public class GameDisplay extends JLayeredPane {
-	private static final long serialVersionUID = 1L;
-	private final AsciiPanel asciiPanel;
-	private final DisplayHighlighter displayHighlighter;
-	private final Console console;
+    private static final long serialVersionUID = 1L;
+    private final AsciiPanel asciiPanel;
+    private final DisplayHighlighter displayHighlighter;
+    private final Console console;
 
-	public GameDisplay(final int widthInChars, final int heightInChars) {
-		asciiPanel = new AsciiPanel(widthInChars, heightInChars);
-		displayHighlighter = new DisplayHighlighter(widthInChars, heightInChars);
-		displayHighlighter.setPreferredSize(asciiPanel.getPreferredSize());
-		displayHighlighter.setBounds(0, 0,
-				displayHighlighter.getPreferredSize().width,
-				displayHighlighter.getPreferredSize().height);
-		console = new Console(new Dimension(
-				asciiPanel.getPreferredSize().width / 4,
-				asciiPanel.getPreferredSize().height));
+    public GameDisplay(final int widthInChars, final int heightInChars) {
+	asciiPanel = new AsciiPanel(widthInChars, heightInChars);
+	displayHighlighter = new DisplayHighlighter(widthInChars, heightInChars);
+	displayHighlighter.setPreferredSize(asciiPanel.getPreferredSize());
+	displayHighlighter.setBounds(0, 0, displayHighlighter.getPreferredSize().width, displayHighlighter.getPreferredSize().height);
+	console = new Console(new Dimension(asciiPanel.getPreferredSize().width / 4, asciiPanel.getPreferredSize().height));
 
-		final JPanel backgroundPanel = new JPanel();
-		backgroundPanel.setLayout(new BorderLayout());
-		backgroundPanel.add(asciiPanel, BorderLayout.WEST);
-		backgroundPanel.add(console.scrollPane, BorderLayout.EAST);
-		backgroundPanel.setBounds(0, 0,
-				backgroundPanel.getPreferredSize().width,
-				backgroundPanel.getPreferredSize().height);
+	final JPanel backgroundPanel = new JPanel();
+	backgroundPanel.setLayout(new BorderLayout());
+	backgroundPanel.add(asciiPanel, BorderLayout.WEST);
+	backgroundPanel.add(console.scrollPane, BorderLayout.EAST);
+	backgroundPanel.setBounds(0, 0, backgroundPanel.getPreferredSize().width, backgroundPanel.getPreferredSize().height);
 
-		this.add(backgroundPanel, new Integer(0));
-		this.add(displayHighlighter, new Integer(1));
+	this.add(backgroundPanel, new Integer(0));
+	this.add(displayHighlighter, new Integer(1));
 
-		setPreferredSize(new Dimension(
-				backgroundPanel.getPreferredSize().width,
-				backgroundPanel.getPreferredSize().height));
-	}
+	setPreferredSize(new Dimension(backgroundPanel.getPreferredSize().width, backgroundPanel.getPreferredSize().height));
 
-	public AsciiPanel getAsciiPanel() {
-		return asciiPanel;
-	}
+	setFocusable(true);
+	requestFocus();
+    }
 
-	public DisplayHighlighter getDisplayHighlighter() {
-		return displayHighlighter;
-	}
+    public AsciiPanel getAsciiPanel() {
+	return asciiPanel;
+    }
 
-	public Console getConsole() {
-		return console;
-	}
+    public DisplayHighlighter getDisplayHighlighter() {
+	return displayHighlighter;
+    }
+
+    public Console getConsole() {
+	return console;
+    }
 }

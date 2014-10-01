@@ -3,22 +3,18 @@ package game.map.generators;
 import game.map.MapGenerator;
 import game.map.SimplexNoise;
 import game.tiles.GroundTile;
+import main.Game;
 
 public class TerrainGenerator implements MapGenerator<GroundTile> {
-
-    private long seed;
-
-    public long getSeed() {
-	return seed;
-    }
 
     @Override
     public GroundTile[][] generate(final int width, final int height) {
 
 	final GroundTile[][] tiles = new GroundTile[width][height];
 
-	seed = System.currentTimeMillis();
-	final SimplexNoise noise = new SimplexNoise(100, 0.5, seed);
+	// 3200 is random number to deviate from norm, but must be same every
+	// time
+	final SimplexNoise noise = new SimplexNoise(100, 0.5, Game.RAND_SEED + 3200);
 
 	for (int i = 0; i < width; i++) {
 	    for (int j = 0; j < height; j++) {
