@@ -1,4 +1,4 @@
-package game.map;
+package game.map.weather;
 
 import static java.util.Arrays.asList;
 

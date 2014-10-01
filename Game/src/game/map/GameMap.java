@@ -4,6 +4,7 @@ import game.entity.Entity;
 import game.pathfinding.AStar;
 import game.pathfinding.AbstractPathFinder;
 import game.tiles.Displayable;
+import game.tiles.GroundTile;
 import game.tiles.Tile;
 import graphics.Display;
 import graphics.DrawingLayer;
@@ -43,7 +44,7 @@ public class GameMap {
 	for (int i = 0; i < width; i++) {
 	    for (int j = 0; j < height; j++) {
 		waterLevel[i][j] = 0.3f;
-		background[i][j] = new Tile(i, j, Displayable.NULL_DISPLAYABLE);
+		background[i][j] = new Tile(i, j, 0, Displayable.NULL_DISPLAYABLE);
 	    }
 	}
 
@@ -80,11 +81,27 @@ public class GameMap {
 
 	for (int x = getViewportX(); x < getViewportX() + viewportWidthInTiles; x++) {
 	    for (int y = viewportY; y < viewportY + viewportHeightInTiles; y++) {
-		final char character = background[x][y].getCharacter();
-		final Color foreground = background[x][y].getForeground();
-		final Color backgroundColor = background[x][y].getBackground();
-		final AsciiCharacterData data = new AsciiCharacterData(character, foreground, backgroundColor);
-		display.setCharacterAt(x - getViewportX(), y - viewportY, background[x][y].getDrawingLayer(), data);
+		if (background[x][y].height > waterLevel[x][y]) {
+		    final char character = background[x][y].getCharacter();
+		    final Color foreground = background[x][y].getForeground();
+		    final Color backgroundColor = background[x][y].getBackground();
+		    final AsciiCharacterData data = new AsciiCharacterData(character, foreground, backgroundColor);
+		    display.setCharacterAt(x - getViewportX(), y - viewportY, background[x][y].getDrawingLayer(), data);
+		} else if (background[x][y].height > waterLevel[x][y] - 0.05f) {
+		    // If we are in between the water level and the deep water
+		    // level
+		    final char character = GroundTile.WATER.getCharacter();
+		    final Color foreground = GroundTile.WATER.getForeground();
+		    final Color backgroundColor = GroundTile.WATER.getBackground();
+		    final AsciiCharacterData data = new AsciiCharacterData(character, foreground, backgroundColor);
+		    display.setCharacterAt(x - getViewportX(), y - viewportY, GroundTile.WATER.getDrawingLayer(), data);
+		} else {
+		    final char character = GroundTile.DEEP_WATER.getCharacter();
+		    final Color foreground = GroundTile.DEEP_WATER.getForeground();
+		    final Color backgroundColor = GroundTile.DEEP_WATER.getBackground();
+		    final AsciiCharacterData data = new AsciiCharacterData(character, foreground, backgroundColor);
+		    display.setCharacterAt(x - getViewportX(), y - viewportY, GroundTile.DEEP_WATER.getDrawingLayer(), data);
+		}
 	    }
 	}
 	display.clearLayer(DrawingLayer.PRIMARY);
@@ -112,8 +129,8 @@ public class GameMap {
 	background[x][y] = tile;
     }
 
-    public void setBackgroundTile(final int x, final int y, final Displayable displayable) {
-	final Tile t = new Tile(x, y, displayable);
+    public void setBackgroundTile(final int x, final int y, final double height, final Displayable displayable) {
+	final Tile t = new Tile(x, y, height, displayable);
 	attachNeighbors(t);
 	this.setBackgroundTile(x, y, t);
     }

@@ -1,4 +1,4 @@
-package game.map;
+package game.map.noise;
 
 import java.util.Random;
 

@@ -1,6 +1,7 @@
 package game.map;
 
 import static org.junit.Assert.assertEquals;
+import game.map.weather.Biome;
 
 import org.junit.Test;
 

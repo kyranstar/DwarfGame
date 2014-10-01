@@ -1,8 +1,7 @@
 package game.map.generators;
 
-import game.map.Biome;
-import game.map.MapGenerator;
-import game.map.SimplexNoise;
+import game.map.noise.SimplexNoise;
+import game.map.weather.Biome;
 import game.math.MathUtils;
 import main.Game;
 

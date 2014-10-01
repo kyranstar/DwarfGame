@@ -1,8 +1,7 @@
 package game.map.generators;
 
-import game.map.Biome;
-import game.map.MapGenerator;
-import game.map.SimplexNoise;
+import game.map.noise.SimplexNoise;
+import game.map.weather.Biome;
 import game.math.MathUtils;
 import main.Game;
 
@@ -25,7 +24,7 @@ public class TempGenerator implements MapGenerator<Integer> {
 	double min = Integer.MAX_VALUE;
 	double max = Integer.MIN_VALUE;
 
-	final double[][] results = new double[width / scale][height / scale];
+	final double[][] results = new double[width / scale + 1][height / scale + 1];
 
 	for (int i = 0; i < width / scale; i++) {
 	    for (int j = 0; j < height / scale; j++) {
@@ -40,6 +39,8 @@ public class TempGenerator implements MapGenerator<Integer> {
 	}
 	for (int i = 0; i < width; i++) {
 	    for (int j = 0; j < height; j++) {
+		// Maps number from the range of the perlin noise to the range
+		// of the temperature
 		// + 0.5 to round normally
 		tiles[i][j] = (int) (MathUtils.mapNumInRange(results[i / scale][j / scale], min, max, Biome.TempRange.getMin(), Biome.TempRange.getMax()) + 0.5);
 	    }
