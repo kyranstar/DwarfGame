@@ -25,6 +25,10 @@ public final class MathUtils {
 	return new RangeDouble(min, max);
     }
 
+    public static double getSineWave(final double x, final double wavelength) {
+	return Math.sin(Math.PI * x / wavelength);
+    }
+
     public static double mapNumInRange(final double num, final double prevMin, final double prevMax, final double newMin, final double newMax) {
 	return (num - prevMin) / (prevMax - prevMin) * (newMax - newMin) + newMin;
     }

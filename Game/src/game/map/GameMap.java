@@ -1,6 +1,7 @@
 package game.map;
 
 import game.entity.Entity;
+import game.map.weather.Calendar;
 import game.pathfinding.AStar;
 import game.pathfinding.AbstractPathFinder;
 import game.tiles.Displayable;
@@ -12,15 +13,20 @@ import graphics.asciiPanel.AsciiCharacterData;
 import graphics.asciiPanel.AsciiPanel;
 
 import java.awt.Color;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class GameMap {
+    private static final Duration TIME_PER_UPDATE = Duration.ofMinutes(5);
+
     private final Tile[][] background;
     private final int[][] averageTemperature;
     private final int[][] averagePercipitation;
     private final double[][] waterLevel;
+
+    private final Calendar calendar = new Calendar(0);
 
     List<Entity> entities = new ArrayList<>();
 
@@ -209,6 +215,10 @@ public class GameMap {
 
     public void setAveragePercipitation(final int x, final int y, final Integer avPer) {
 	averagePercipitation[x][y] = avPer;
+    }
+
+    public void update() {
+	calendar.addTime(TIME_PER_UPDATE);
     }
 
 }
