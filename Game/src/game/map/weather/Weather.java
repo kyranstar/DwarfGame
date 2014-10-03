@@ -21,12 +21,19 @@ public class Weather {
     public Weather(final GameMap map, final int clouds) {
 	this.map = map;
 	for (int i = 0; i < clouds; i++) {
-	    getClouds().add(Cloud.createNew(MathUtils.randBetween(10, 20), MathUtils.randBetween(10, 20), map.getWidth(), map.getHeight()));
+	    getClouds().add(Cloud.createNew(MathUtils.randBetween(20, 60), MathUtils.randBetween(10, 20), map.getWidth(), map.getHeight()));
 	}
     }
 
+    /**
+     * Updates all of the clouds this weather object contains. This method is in
+     * charge of updating the water content of the clouds and how often they
+     * rain.
+     *
+     * @param deltaTime
+     */
     public void update(final Duration delta) {
-	map.clearRaining();
+	map.clearRainingIntensity();
 
 	final double deltaTime = delta.toMinutes() / 60f;
 
@@ -51,7 +58,16 @@ public class Weather {
 		    }
 
 		    final double averagePrecipitation = MathUtils.mapNum0to1(map.getAveragePrecipitation()[x][y], TempRange.getMin(), TempRange.getMax());
-		    final double pickedUp = RAIN_PICKUP_RATE * p.getIntensity() * averagePrecipitation;
+		    double pickedUp = RAIN_PICKUP_RATE * p.getIntensity() * averagePrecipitation;
+		    if (map.getEvaporatedWater()[x][y] <= 0) {
+			map.getEvaporatedWater()[x][y] = 0;
+			pickedUp = 0;
+		    } else if (map.getEvaporatedWater()[x][y] - pickedUp <= 0) {
+			pickedUp = map.getEvaporatedWater()[x][y];
+			map.getEvaporatedWater()[x][y] = 0;
+		    } else {
+			map.getEvaporatedWater()[x][y] -= pickedUp;
+		    }
 		    // + (1 - p.getIntensity()) * Math.random() / 15; // This
 		    // would add extra rising on the sides
 		    p.setWaterContent(Math.min(p.getWaterContent() + pickedUp * deltaTime, 1));
@@ -78,9 +94,13 @@ public class Weather {
 		    if (y > map.getHeight() - 1) {
 			y = map.getHeight() - 1;
 		    }
-		    p.setWaterContent(Math.max(p.getWaterContent() - RAIN_RATE * (Math.random() * p.getIntensity() * deltaTime), 0));
+		    double amountToLose = RAIN_RATE * (Math.random() * p.getIntensity() * deltaTime);
+		    if (p.getWaterContent() - amountToLose < 0) {
+			amountToLose = p.getWaterContent();
+		    }
+		    p.setWaterContent(p.getWaterContent() - amountToLose);
 		    if (p.getWaterContent() > 0) {
-			map.getRaining()[x][y] = true;
+			map.getRainingIntensity()[x][y] = amountToLose;
 			rainingCount++;
 		    }
 		}
@@ -105,22 +125,22 @@ public class Weather {
 		    // top
 		    cloudX = MathUtils.randBetween(0, map.getWidth() - 1);
 		    cloudY = 0 - cloud.getHeight();
-		    velocity = new Vec2D(0, Cloud.CLOUD_SPEED);
+		    velocity = new Vec2D(0, Cloud.BASE_CLOUD_SPEED);
 		} else if (rand < 0.5) {
 		    // bottom
 		    cloudX = MathUtils.randBetween(0, map.getWidth() - 1);
 		    cloudY = map.getHeight() - 1;
-		    velocity = new Vec2D(0, -Cloud.CLOUD_SPEED);
+		    velocity = new Vec2D(0, -Cloud.BASE_CLOUD_SPEED);
 		} else if (rand < 0.75) {
 		    // right
 		    cloudX = map.getWidth() - 1;
 		    cloudY = MathUtils.randBetween(0, map.getHeight() - 1);
-		    velocity = new Vec2D(-Cloud.CLOUD_SPEED, 0);
+		    velocity = new Vec2D(-Cloud.BASE_CLOUD_SPEED, 0);
 		} else {
 		    // Left
 		    cloudX = 0 - cloud.getWidth();
 		    cloudY = MathUtils.randBetween(0, map.getHeight() - 1);
-		    velocity = new Vec2D(Cloud.CLOUD_SPEED, 0);
+		    velocity = new Vec2D(Cloud.BASE_CLOUD_SPEED, 0);
 		}
 		cloud.setPosition(cloudX, cloudY);
 		cloud.setVelocity(velocity);

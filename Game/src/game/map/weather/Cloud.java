@@ -10,9 +10,18 @@ import java.util.List;
 
 import main.Game;
 
+/**
+ * @author s-KADAMS
+ *
+ */
+/**
+ * @author s-KADAMS
+ *
+ */
 public class Cloud {
 
-    public static final double CLOUD_SPEED = 0.15;
+    public static final double BASE_CLOUD_SPEED = 0.15;
+    public static final double CLOUD_SPEED_VARIATION = 0.5;
 
     private List<CloudPart> parts = new ArrayList<>();
     Vec2D velocity = new Vec2D();
@@ -25,6 +34,14 @@ public class Cloud {
     // 2354 is random number to deviate from norm, but must be same every
     // time
 
+    /**
+     * Private constructor, call {@link Cloud#createNew()}
+     *
+     * @param cloudParts
+     * @param velocity
+     * @param cloudWidth
+     * @param cloudHeight
+     */
     private Cloud(final List<CloudPart> cloudParts, final Vec2D velocity, final int cloudWidth, final int cloudHeight) {
 	setParts(cloudParts);
 	this.velocity = velocity;
@@ -32,6 +49,12 @@ public class Cloud {
 	this.cloudHeight = cloudHeight;
     }
 
+    /**
+     * The update method, updates the position of each piece of the cloud with
+     * its velocity.
+     *
+     * @param changeInTime
+     */
     public void update(final Duration delta) {
 	final double deltaTime = delta.toMinutes() / 60f;
 
@@ -41,6 +64,11 @@ public class Cloud {
 	}
     }
 
+    /**
+     * @param width
+     * @param height
+     * @return isOffScreen
+     */
     public boolean isOffScreen(final int width, final int height) {
 	for (final CloudPart point : getParts()) {
 	    if (point.getX() >= 0 && point.getX() <= width && point.getY() >= 0 && point.getY() < height)
@@ -49,11 +77,23 @@ public class Cloud {
 	return true;
     }
 
-    static int i = 0;
+    /**
+     * increments every time a cloud is created, for incrementing the RAND seed
+     */
+    static int cloudCount = 0;
 
+    /**
+     * Creates a random cloud from passed in parameters.
+     *
+     * @param cloudWidth
+     * @param cloudHeight
+     * @param screenWidth
+     * @param screenHeight
+     * @return aNewCloud
+     */
     public static Cloud createNew(final int cloudWidth, final int cloudHeight, final int screenWidth, final int screenHeight) {
 
-	final SimplexNoise CLOUD_NOISE = new SimplexNoise(10, 0.4, Game.RAND_SEED + 2354 + i++);
+	final SimplexNoise CLOUD_NOISE = new SimplexNoise(MathUtils.randBetween(14, 21), 0.5, Game.RAND_SEED + 2354 + cloudCount++);
 	double cloudX, cloudY;
 	Vec2D velocity;
 
@@ -62,22 +102,22 @@ public class Cloud {
 	    // top
 	    cloudX = MathUtils.randBetween(0, screenWidth - 1);
 	    cloudY = 0 - cloudHeight;
-	    velocity = new Vec2D(0, CLOUD_SPEED);
+	    velocity = new Vec2D(0, MathUtils.plusOrMinusRand(BASE_CLOUD_SPEED, CLOUD_SPEED_VARIATION));
 	} else if (rand < 0.5) {
 	    // bottom
 	    cloudX = MathUtils.randBetween(0, screenWidth - 1);
 	    cloudY = screenHeight - 1;
-	    velocity = new Vec2D(0, -CLOUD_SPEED);
+	    velocity = new Vec2D(0, -MathUtils.plusOrMinusRand(BASE_CLOUD_SPEED, CLOUD_SPEED_VARIATION));
 	} else if (rand < 0.75) {
 	    // right
 	    cloudX = screenWidth - 1;
 	    cloudY = MathUtils.randBetween(0, screenHeight - 1);
-	    velocity = new Vec2D(-CLOUD_SPEED, 0);
+	    velocity = new Vec2D(-MathUtils.plusOrMinusRand(BASE_CLOUD_SPEED, CLOUD_SPEED_VARIATION), 0);
 	} else {
 	    // Left
 	    cloudX = 0 - cloudWidth;
 	    cloudY = MathUtils.randBetween(0, screenHeight - 1);
-	    velocity = new Vec2D(CLOUD_SPEED, 0);
+	    velocity = new Vec2D(MathUtils.plusOrMinusRand(BASE_CLOUD_SPEED, CLOUD_SPEED_VARIATION), 0);
 	}
 	// velocity = new Vec2D(0, 0);
 
