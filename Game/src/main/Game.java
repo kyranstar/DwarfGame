@@ -21,7 +21,7 @@ public class Game extends GameLoop {
 
     public static final long RAND_SEED = System.currentTimeMillis();
 
-    private static final int TARGET_FPS = 60;
+    private static final int TARGET_FPS = 10;
 
     public Game(final GameDisplay gameDisplay) {
 	super(TARGET_FPS);
@@ -76,12 +76,14 @@ public class Game extends GameLoop {
 
     @Override
     public void update() {
-
+	map.update();
     }
 
     @Override
     public void draw() {
 	map.draw(display);
 	highlighter.draw(map.getViewportX(), map.getViewportY());
+
+	display.repaint();
     }
 }

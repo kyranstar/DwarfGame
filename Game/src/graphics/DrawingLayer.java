@@ -1,11 +1,14 @@
 package graphics;
 
 public enum DrawingLayer {
-	BACKGROUND(0), SECONDARY(1), PRIMARY(2);
+    BACKGROUND(0),
+    SECONDARY(1),
+    PRIMARY(2),
+    CLOUDS(3);
 
-	public final int layer;
+    public final int layer;
 
-	private DrawingLayer(final int layer) {
-		this.layer = layer;
-	}
+    private DrawingLayer(final int layer) {
+	this.layer = layer;
+    }
 }

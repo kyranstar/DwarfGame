@@ -1,6 +1,8 @@
 package game.map.weather;
 
 import static java.util.Arrays.asList;
+import game.math.units.NumberDistance;
+import game.math.units.NumberDistance.Centimeter;
 
 import java.util.List;
 
@@ -27,7 +29,7 @@ public enum Biome {
 	this.rain = rain;
     }
 
-    public static Biome getBiome(final int temp, final int percipitation) {
+    public static Biome getBiome(final int temp, final NumberDistance percipitation) {
 	for (final Biome biome : values()) {
 	    boolean valid = false;
 	    for (final TempRange tRange : biome.temp) {
@@ -85,16 +87,16 @@ public enum Biome {
 	HUMID(125, 250),
 	MARSHY(250, Integer.MAX_VALUE);
 
-	final int min;
-	final int max;
+	final NumberDistance min;
+	final NumberDistance max;
 
 	RainRange(final int min, final int max) {
-	    this.min = min;
-	    this.max = max;
+	    this.min = Centimeter.of(min);
+	    this.max = Centimeter.of(max);
 	}
 
-	public boolean contains(final int num) {
-	    return num >= min && num <= max;
+	public boolean contains(final NumberDistance num) {
+	    return num.greaterThanOrEqual(min) && num.lessThanOrEqual(max);
 	}
 
 	public static int getMin() {

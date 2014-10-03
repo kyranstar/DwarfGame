@@ -34,7 +34,6 @@ public class TerrainGenerator implements MapGenerator<Tile> {
 	    }
 	}
 
-	// TODO: map values from 0 to 1
 	for (int i = 0; i < width; i++) {
 	    for (int j = 0; j < height; j++) {
 		final double mappedResult = MathUtils.mapNumInRange(result[i][j], min, max, 0, 1);
