@@ -29,7 +29,6 @@ public class Weather {
 	map.clearRaining();
 
 	final double deltaTime = delta.toMinutes() / 60f;
-
 	for (int i = getClouds().size() - 1; i >= 0; i--) {
 	    final Cloud cloud = getClouds().get(i);
 	    cloud.update(delta);
@@ -55,7 +54,6 @@ public class Weather {
 		    // + (1 - p.getIntensity()) * Math.random() / 15; // This
 		    // would add extra rising on the sides
 		    p.setWaterContent(Math.min(p.getWaterContent() + pickedUp * deltaTime, 1));
-
 		    // TODO update cloud from the surrounding clouds
 		    if (p.getWaterContent() >= 1) {
 			cloud.setRaining(true);
@@ -78,9 +76,10 @@ public class Weather {
 		    if (y > map.getHeight() - 1) {
 			y = map.getHeight() - 1;
 		    }
-		    p.setWaterContent(Math.max(p.getWaterContent() - RAIN_RATE * (Math.random() * p.getIntensity() * deltaTime), 0));
+		    final double waterRained = RAIN_RATE * (Math.random() * p.getIntensity() * deltaTime);
+		    p.setWaterContent(Math.max(p.getWaterContent() - waterRained, 0));
 		    if (p.getWaterContent() > 0) {
-			map.getRaining()[x][y] = true;
+			map.getRaining()[x][y] = waterRained;
 			rainingCount++;
 		    }
 		}

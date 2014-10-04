@@ -22,13 +22,17 @@ import java.util.Collection;
 import java.util.List;
 
 public class GameMap {
-    public static final Duration TIME_PER_UPDATE = Duration.ofMinutes(180);
+    private static final double EVAPORATION_RATE = 0.9999f;
+    private static final double RUNOFF_RATE = 0.01f;
+
+    public static final Duration TIME_PER_UPDATE = Duration.ofMinutes(360);
 
     private final Tile[][] background;
     private final int[][] averageTemperature;
     private final int[][] averagePrecipitation;
     private final double[][] waterLevel;
-    private boolean[][] raining;
+    private final double averageWaterLevel;
+    private double[][] raining;
 
     Weather weather;
     private final Calendar calendar = new Calendar(0);
@@ -51,12 +55,14 @@ public class GameMap {
 	averageTemperature = new int[width][height];
 	averagePrecipitation = new int[width][height];
 	waterLevel = new double[width][height];
-	setRaining(new boolean[width][height]);
+	raining = new double[width][height];
 	weather = new Weather(this, 10);
+
+	averageWaterLevel = 0.3f;
 
 	for (int i = 0; i < width; i++) {
 	    for (int j = 0; j < height; j++) {
-		waterLevel[i][j] = 0.3f;
+		waterLevel[i][j] = averageWaterLevel;
 		background[i][j] = new Tile(i, j, 0, Displayable.NULL_DISPLAYABLE);
 	    }
 	}
@@ -91,7 +97,15 @@ public class GameMap {
     }
 
     public void draw(final Display display) {
+	drawBackground(display);
+	drawEntities(display);
+	drawClouds(display);
+    }
 
+    /**
+     * @param display
+     */
+    private void drawBackground(final Display display) {
 	for (int x = getViewportX(); x < getViewportX() + viewportWidthInTiles; x++) {
 	    for (int y = viewportY; y < viewportY + viewportHeightInTiles; y++) {
 		if (background[x][y].height > waterLevel[x][y]) {
@@ -117,6 +131,12 @@ public class GameMap {
 		}
 	    }
 	}
+    }
+
+    /**
+     * @param display
+     */
+    private void drawEntities(final Display display) {
 	display.clearLayer(DrawingLayer.PRIMARY);
 	for (int i = 0; i < entities.size(); i++) {
 	    final Entity e = entities.get(i);
@@ -127,22 +147,24 @@ public class GameMap {
 	    final AsciiCharacterData data = new AsciiCharacterData(character, foreground, backgroundColor);
 	    display.setCharacterAt(e.getX() - getViewportX(), e.getY() - viewportY, e.getDrawingLayer(), data);
 	}
+    }
+
+    /**
+     * @param display
+     */
+    private void drawClouds(final Display display) {
 	display.clearLayer(DrawingLayer.CLOUDS);
 
-	// setViewportX((int)
-	// weather.getClouds().get(0).getParts().get(0).getX());
-	// setViewportY((int)
-	// weather.getClouds().get(0).getParts().get(0).getY());
 	for (final Cloud cloud : weather.getClouds()) {
 	    for (final CloudPart p : cloud.getParts()) {
-		Color c = new Color((int) (255 * p.getWaterContent()), (int) (255 * p.getWaterContent()), (int) (255 * p.getWaterContent()));
-		// System.out.println(p.getWaterContent());
+		final int col = 255 / 2 + (int) (255 / 2 * (1 - p.getWaterContent()));
+		Color c = new Color(col, col, col);
+
 		if (cloud.isRaining()) {
-		    c = new Color(0, 0, (int) (255 * p.getWaterContent()));
+		    c = new Color(255 / 2, 255 / 2, col);
 		}
 		final char character = '#';
 		final AsciiCharacterData data = new AsciiCharacterData(character, Color.WHITE, c);
-		System.out.println(p.getX() + "," + p.getY());
 		display.setCharacterAt((int) p.getX() - getViewportX(), (int) p.getY() - getViewportY(), DrawingLayer.CLOUDS, data);
 	    }
 	}
@@ -245,6 +267,47 @@ public class GameMap {
     public void update() {
 	calendar.addTime(TIME_PER_UPDATE);
 	weather.update(TIME_PER_UPDATE);
+
+	updateWaterLevel();
+    }
+
+    /**
+     * Evaporates from water levels that are above average. Also handles water
+     * running off to lower water levels
+     */
+    private void updateWaterLevel() {
+	for (int x = 0; x < getWidth(); x++) {
+	    for (int y = 0; y < getHeight(); y++) {
+		waterLevel[x][y] += raining[x][y];
+		if (waterLevel[x][y] > averageWaterLevel) {
+		    waterLevel[x][y] *= EVAPORATION_RATE;
+		}
+
+		raining[x][y] = 0;
+		if (x != 0 && waterLevel[x - 1][y] < waterLevel[x][y]) {
+		    final double dif = (waterLevel[x][y] - waterLevel[x - 1][y]) * RUNOFF_RATE;
+
+		    waterLevel[x - 1][y] += dif;
+		    waterLevel[x][y] -= dif;
+		}
+		if (y != 0 && waterLevel[x][y - 1] < waterLevel[x][y]) {
+		    final double dif = (waterLevel[x][y] - waterLevel[x][y - 1]) * RUNOFF_RATE;
+
+		    waterLevel[x][y - 1] += dif;
+		    waterLevel[x][y] -= dif;
+		}
+		if (y != getHeight() - 1 && waterLevel[x][y + 1] < waterLevel[x][y]) {
+		    final double dif = (waterLevel[x][y] - waterLevel[x][y + 1]) * RUNOFF_RATE;
+		    waterLevel[x][y + 1] += dif;
+		    waterLevel[x][y] -= dif;
+		}
+		if (x != getWidth() - 1 && waterLevel[x + 1][y] < waterLevel[x][y]) {
+		    final double dif = (waterLevel[x][y] - waterLevel[x + 1][y]) * RUNOFF_RATE;
+		    waterLevel[x + 1][y] += dif;
+		    waterLevel[x][y] -= dif;
+		}
+	    }
+	}
     }
 
     public int[][] getAveragePrecipitation() {
@@ -252,15 +315,11 @@ public class GameMap {
     }
 
     public void clearRaining() {
-	setRaining(new boolean[getWidth()][getHeight()]);
+	raining = new double[getWidth()][getHeight()];
     }
 
-    public boolean[][] getRaining() {
+    public double[][] getRaining() {
 	return raining;
-    }
-
-    public void setRaining(final boolean[][] raining) {
-	this.raining = raining;
     }
 
 }
