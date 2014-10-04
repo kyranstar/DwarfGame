@@ -104,22 +104,22 @@ public class Weather {
 		    // top
 		    cloudX = MathUtils.randBetween(0, map.getWidth() - 1);
 		    cloudY = 0 - cloud.getHeight();
-		    velocity = new Vec2D(0, Cloud.CLOUD_SPEED);
+		    velocity = new Vec2D(0, MathUtils.plusOrMinusRand(Cloud.BASE_CLOUD_SPEED, Cloud.CLOUD_SPEED_VARIATION));
 		} else if (rand < 0.5) {
 		    // bottom
 		    cloudX = MathUtils.randBetween(0, map.getWidth() - 1);
 		    cloudY = map.getHeight() - 1;
-		    velocity = new Vec2D(0, -Cloud.CLOUD_SPEED);
+		    velocity = new Vec2D(0, -MathUtils.plusOrMinusRand(Cloud.BASE_CLOUD_SPEED, Cloud.CLOUD_SPEED_VARIATION));
 		} else if (rand < 0.75) {
 		    // right
 		    cloudX = map.getWidth() - 1;
 		    cloudY = MathUtils.randBetween(0, map.getHeight() - 1);
-		    velocity = new Vec2D(-Cloud.CLOUD_SPEED, 0);
+		    velocity = new Vec2D(-MathUtils.plusOrMinusRand(Cloud.BASE_CLOUD_SPEED, Cloud.CLOUD_SPEED_VARIATION), 0);
 		} else {
 		    // Left
 		    cloudX = 0 - cloud.getWidth();
 		    cloudY = MathUtils.randBetween(0, map.getHeight() - 1);
-		    velocity = new Vec2D(Cloud.CLOUD_SPEED, 0);
+		    velocity = new Vec2D(MathUtils.plusOrMinusRand(Cloud.BASE_CLOUD_SPEED, Cloud.CLOUD_SPEED_VARIATION), 0);
 		}
 		cloud.setPosition(cloudX, cloudY);
 		cloud.setVelocity(velocity);

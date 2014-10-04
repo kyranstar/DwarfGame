@@ -40,7 +40,8 @@ public enum Biome {
 		}
 	    }
 	    if (!valid) {
-		// if this does not have a valid temp range, go to next biome
+		// if this does not have a valid temperature range, go to next
+		// biome
 		continue;
 	    }
 	    for (final RainRange rRange : biome.rain) {

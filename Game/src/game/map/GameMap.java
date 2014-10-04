@@ -25,7 +25,7 @@ public class GameMap {
     private static final double EVAPORATION_RATE = 0.9999f;
     private static final double RUNOFF_RATE = 0.01f;
 
-    public static final Duration TIME_PER_UPDATE = Duration.ofMinutes(360);
+    public static final Duration TIME_PER_UPDATE = Duration.ofMinutes(5);
 
     private final Tile[][] background;
     private final int[][] averageTemperature;
