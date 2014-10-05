@@ -21,10 +21,11 @@ public class Game extends GameLoop {
 
     public static final long RAND_SEED = System.currentTimeMillis();
 
-    private static final int TARGET_FPS = 10;
+    private static final int TARGET_FPS = 30;
+    private static final int TARGET_UPS = 10;
 
     public Game(final GameDisplay gameDisplay) {
-	super(TARGET_FPS);
+	super(TARGET_FPS, TARGET_UPS);
 	display = new Display(gameDisplay.getAsciiPanel());
 	highlighter = gameDisplay.getDisplayHighlighter();
 
