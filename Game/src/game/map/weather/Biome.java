@@ -1,8 +1,10 @@
 package game.map.weather;
 
 import static java.util.Arrays.asList;
-import game.math.units.NumberDistance;
-import game.math.units.NumberDistance.Centimeter;
+import game.math.units.DistanceUnit;
+import game.math.units.DistanceUnit.Centimeter;
+import game.math.units.TemperatureUnit;
+import game.math.units.TemperatureUnit.Celcius;
 
 import java.util.List;
 
@@ -29,7 +31,7 @@ public enum Biome {
 	this.rain = rain;
     }
 
-    public static Biome getBiome(final int temp, final NumberDistance percipitation) {
+    public static Biome getBiome(final TemperatureUnit temp, final DistanceUnit percipitation) {
 	for (final Biome biome : values()) {
 	    boolean valid = false;
 	    for (final TempRange tRange : biome.temp) {
@@ -54,58 +56,56 @@ public enum Biome {
     }
 
     public static enum TempRange {
-	// USES CELCIUS!
-	FREEZE(Integer.MIN_VALUE, 0),
-	TEMPERATE(0, 10),
-	WARM(10, 20),
-	HOT(20, Integer.MAX_VALUE);
+	FREEZE(Celcius.of(Integer.MIN_VALUE), Celcius.of(0)),
+	TEMPERATE(Celcius.of(0), Celcius.of(10)),
+	WARM(Celcius.of(10), Celcius.of(20)),
+	HOT(Celcius.of(20), Celcius.of(Integer.MAX_VALUE));
 
-	final int min;
-	final int max;
+	final TemperatureUnit min;
+	final TemperatureUnit max;
 
-	TempRange(final int min, final int max) {
+	TempRange(final TemperatureUnit min, final TemperatureUnit max) {
 	    this.min = min;
 	    this.max = max;
 	}
 
-	public boolean contains(final int num) {
-	    return num >= min && num <= max;
+	public boolean contains(final TemperatureUnit num) {
+	    return num.greaterThanOrEqual(min) && num.lessThanOrEqual(max);
 	}
 
-	public static int getMin() {
-	    return -10;
+	public static TemperatureUnit getMin() {
+	    return Celcius.of(-10);
 	}
 
-	public static int getMax() {
-	    return 30;
+	public static TemperatureUnit getMax() {
+	    return Celcius.of(30);
 	}
     }
 
     public static enum RainRange {
-	// USES CM!
-	ARID(Integer.MIN_VALUE, 50),
-	DRY(50, 125),
-	HUMID(125, 250),
-	MARSHY(250, Integer.MAX_VALUE);
+	ARID(Centimeter.of(Integer.MIN_VALUE), Centimeter.of(50)),
+	DRY(Centimeter.of(50), Centimeter.of(125)),
+	HUMID(Centimeter.of(125), Centimeter.of(250)),
+	MARSHY(Centimeter.of(250), Centimeter.of(Integer.MAX_VALUE));
 
-	final NumberDistance min;
-	final NumberDistance max;
+	final DistanceUnit min;
+	final DistanceUnit max;
 
-	RainRange(final int min, final int max) {
-	    this.min = Centimeter.of(min);
-	    this.max = Centimeter.of(max);
+	RainRange(final DistanceUnit min, final DistanceUnit max) {
+	    this.min = min;
+	    this.max = max;
 	}
 
-	public boolean contains(final NumberDistance num) {
+	public boolean contains(final DistanceUnit num) {
 	    return num.greaterThanOrEqual(min) && num.lessThanOrEqual(max);
 	}
 
-	public static int getMin() {
-	    return 0;
+	public static DistanceUnit getMin() {
+	    return Centimeter.of(0);
 	}
 
-	public static int getMax() {
-	    return 300;
+	public static DistanceUnit getMax() {
+	    return Centimeter.of(300);
 	}
     }
 

@@ -40,7 +40,7 @@ public class PercipitationGenerator implements MapGenerator<Integer> {
 	for (int i = 0; i < width; i++) {
 	    for (int j = 0; j < height; j++) {
 		// + 0.5 to round normally
-		tiles[i][j] = (int) (MathUtils.mapNumInRange(results[i / scale][j / scale], min, max, Biome.RainRange.getMin(), Biome.RainRange.getMax()) + 0.5);
+		tiles[i][j] = (int) (MathUtils.mapNumInRange(results[i / scale][j / scale], min, max, Biome.RainRange.getMin().getInCM(), Biome.RainRange.getMax().getInCM()) + 0.5);
 	    }
 	}
 	return tiles;

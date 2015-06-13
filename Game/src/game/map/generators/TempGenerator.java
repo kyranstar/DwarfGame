@@ -42,7 +42,8 @@ public class TempGenerator implements MapGenerator<Integer> {
 		// Maps number from the range of the perlin noise to the range
 		// of the temperature
 		// + 0.5 to round normally
-		tiles[i][j] = (int) (MathUtils.mapNumInRange(results[i / scale][j / scale], min, max, Biome.TempRange.getMin(), Biome.TempRange.getMax()) + 0.5);
+		tiles[i][j] = (int) (MathUtils.mapNumInRange(results[i / scale][j / scale], min, max, Biome.TempRange.getMin().getInCelcius(), Biome.TempRange.getMax()
+			.getInCelcius()) + 0.5);
 	    }
 	}
 	return tiles;

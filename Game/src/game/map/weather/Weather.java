@@ -49,7 +49,8 @@ public class Weather {
 			y = map.getHeight() - 1;
 		    }
 
-		    final double averagePrecipitation = MathUtils.mapNum0to1(map.getAveragePrecipitation()[x][y], TempRange.getMin(), TempRange.getMax());
+		    final double averagePrecipitation = MathUtils.mapNum0to1(map.getAveragePrecipitation()[x][y], TempRange.getMin().getInCelcius(), TempRange.getMax()
+			    .getInCelcius());
 		    final double pickedUp = RAIN_PICKUP_RATE * p.getIntensity() * averagePrecipitation;
 		    // + (1 - p.getIntensity()) * Math.random() / 15; // This
 		    // would add extra rising on the sides

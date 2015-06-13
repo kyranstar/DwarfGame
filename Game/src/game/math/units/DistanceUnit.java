@@ -2,29 +2,29 @@ package game.math.units;
 
 import java.util.Comparator;
 
-public abstract class NumberDistance implements Comparator<NumberDistance>, Comparable<NumberDistance> {
+public abstract class DistanceUnit implements Comparator<DistanceUnit>, Comparable<DistanceUnit> {
     public abstract double getInCM();
 
     public abstract double getInM();
 
-    public boolean lessThan(final NumberDistance other) {
+    public boolean lessThan(final DistanceUnit other) {
 	return getInCM() < other.getInCM();
     }
 
-    public boolean lessThanOrEqual(final NumberDistance other) {
+    public boolean lessThanOrEqual(final DistanceUnit other) {
 	return getInCM() <= other.getInCM();
     }
 
-    public boolean greaterThan(final NumberDistance other) {
+    public boolean greaterThan(final DistanceUnit other) {
 	return getInCM() > other.getInCM();
     }
 
-    public boolean greaterThanOrEqual(final NumberDistance other) {
+    public boolean greaterThanOrEqual(final DistanceUnit other) {
 	return getInCM() >= other.getInCM();
     }
 
     @Override
-    public int compareTo(final NumberDistance o) {
+    public int compareTo(final DistanceUnit o) {
 	if (getInCM() < o.getInCM())
 	    return -1;
 	if (getInCM() > o.getInCM())
@@ -33,7 +33,7 @@ public abstract class NumberDistance implements Comparator<NumberDistance>, Comp
     }
 
     @Override
-    public int compare(final NumberDistance d1, final NumberDistance d2) {
+    public int compare(final DistanceUnit d1, final DistanceUnit d2) {
 	if (d1.getInCM() < d2.getInCM())
 	    return -1;
 	if (d1.getInCM() > d2.getInCM())
@@ -59,13 +59,13 @@ public abstract class NumberDistance implements Comparator<NumberDistance>, Comp
 	    return false;
 	if (getClass() != obj.getClass())
 	    return false;
-	final NumberDistance other = (NumberDistance) obj;
+	final DistanceUnit other = (DistanceUnit) obj;
 	if (Double.doubleToLongBits(getInCM()) != Double.doubleToLongBits(other.getInCM()))
 	    return false;
 	return true;
     }
 
-    public static class Meter extends NumberDistance {
+    public static class Meter extends DistanceUnit {
 	final private double meters;
 
 	public Meter(final double meters) {
@@ -88,7 +88,7 @@ public abstract class NumberDistance implements Comparator<NumberDistance>, Comp
 
     }
 
-    public static class Centimeter extends NumberDistance {
+    public static class Centimeter extends DistanceUnit {
 	final private double centimeters;
 
 	public Centimeter(final double centimeters) {

@@ -24,15 +24,12 @@ public class Cloud {
     public static final double CLOUD_SPEED_VARIATION = 0.5;
 
     private List<CloudPart> parts = new ArrayList<>();
-    Vec2D velocity = new Vec2D();
+    private Vec2D velocity = new Vec2D();
     private boolean raining;
 
     private final int cloudWidth;
 
     private final int cloudHeight;
-
-    // 2354 is random number to deviate from norm, but must be same every
-    // time
 
     /**
      * Private constructor, call {@link Cloud#createNew()}
