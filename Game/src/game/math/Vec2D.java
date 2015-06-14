@@ -9,11 +9,12 @@ import java.awt.geom.Point2D;
  * @author Jadrian Miles
  * @version 20031122
  */
+@SuppressWarnings("serial")
 public class Vec2D extends Point2D.Double {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.awt.geom.Point2D.Double#Point2D.Double()
      */
     public Vec2D() {
@@ -22,7 +23,7 @@ public class Vec2D extends Point2D.Double {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.awt.geom.Point2D.Double#Point2D.Double()
      */
     public Vec2D(final double x, final double y) {
@@ -54,7 +55,7 @@ public class Vec2D extends Point2D.Double {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.awt.geom.Point2D.Double#setLocation(double, double)
      */
     public void set(final double x, final double y) {
@@ -132,7 +133,7 @@ public class Vec2D extends Point2D.Double {
 
     /**
      * An alias for getR()
-     * 
+     *
      * @return the length of this
      */
     public double length() {

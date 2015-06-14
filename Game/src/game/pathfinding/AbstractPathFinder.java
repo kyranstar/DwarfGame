@@ -11,31 +11,30 @@ import java.util.List;
  *
  * @author Gene McCulley
  */
-public abstract class AbstractPathFinder<T extends Node<T>> implements
-PathFinder<T> {
+public abstract class AbstractPathFinder<T extends Node<T>> implements PathFinder<T> {
 
-	protected final List<PathListener<T>> listeners = new ArrayList<PathListener<T>>();
-	protected volatile boolean canceled;
+    protected final List<PathListener<T>> listeners = new ArrayList<PathListener<T>>();
+    protected volatile boolean canceled;
 
-	@Override
-	public void cancel() {
-		canceled = true;
+    @Override
+    public void cancel() {
+	canceled = true;
+    }
+
+    protected void fireConsidered(final PathEvent<T> pathEvent) {
+	for (final PathListener<T> listener : listeners) {
+	    listener.considered(pathEvent);
 	}
+    }
 
-	protected void fireConsidered(final PathEvent<T> pathEvent) {
-		for (final PathListener<T> listener : listeners) {
-			listener.considered(pathEvent);
-		}
-	}
+    @Override
+    public void addPathListener(final PathListener<T> l) {
+	listeners.add(l);
+    }
 
-	@Override
-	public void addPathListener(final PathListener<T> l) {
-		listeners.add(l);
-	}
-
-	@Override
-	public void removePathListener(final PathListener<T> l) {
-		listeners.remove(l);
-	}
+    @Override
+    public void removePathListener(final PathListener<T> l) {
+	listeners.remove(l);
+    }
 
 }

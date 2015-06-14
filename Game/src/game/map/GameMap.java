@@ -5,6 +5,7 @@ import game.map.weather.Calendar;
 import game.map.weather.Cloud;
 import game.map.weather.Cloud.CloudPart;
 import game.map.weather.Weather;
+import game.math.MathUtils;
 import game.pathfinding.AStar;
 import game.pathfinding.AbstractPathFinder;
 import game.tiles.Displayable;
@@ -25,8 +26,6 @@ public class GameMap {
     private static final double EVAPORATION_RATE = 0.9999f;
     private static final double RUNOFF_RATE = 0.01f;
 
-    public static final Duration TIME_PER_UPDATE = Duration.ofMinutes(5);
-
     private final Tile[][] background;
     private final int[][] averageTemperature;
     private final int[][] averagePrecipitation;
@@ -35,7 +34,7 @@ public class GameMap {
     private double[][] raining;
 
     Weather weather;
-    private final Calendar calendar = new Calendar(0);
+    private final Calendar calendar = new Calendar(1000);
 
     List<Entity> entities = new ArrayList<>();
 
@@ -264,9 +263,9 @@ public class GameMap {
 	getAveragePrecipitation()[x][y] = avPer;
     }
 
-    public void update() {
-	calendar.addTime(TIME_PER_UPDATE);
-	weather.update(TIME_PER_UPDATE);
+    public void update(final Duration delta) {
+	getCalendar().addTime(delta);
+	weather.update(delta);
 
 	updateWaterLevel();
     }
@@ -311,7 +310,7 @@ public class GameMap {
     }
 
     public int[][] getAveragePrecipitation() {
-	return averagePrecipitation;
+	return MathUtils.copyArr(averagePrecipitation);
     }
 
     public void clearRaining() {
@@ -319,7 +318,11 @@ public class GameMap {
     }
 
     public double[][] getRaining() {
-	return raining;
+	return MathUtils.copyArr(raining);
+    }
+
+    public Calendar getCalendar() {
+	return calendar;
     }
 
 }

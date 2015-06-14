@@ -34,7 +34,7 @@ public class Calendar {
 	FALL(Month.SEPTEMBER, Month.OCTOBER, Month.NOVEMBER),
 	WINTER(Month.DECEMBER, Month.JANUARY, Month.FEBRUARY);
 
-	Month[] months;
+	private Month[] months;
 
 	Season(final Month... months) {
 	    this.months = months;
@@ -49,5 +49,9 @@ public class Calendar {
 	    }
 	    return null;
 	}
+    }
+
+    public LocalDateTime getDate() {
+	return time;
     }
 }

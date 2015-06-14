@@ -13,7 +13,7 @@ import java.util.List;
 public class Weather {
 
     private final GameMap map;
-    private List<Cloud> clouds = new ArrayList<>();
+    private final List<Cloud> clouds = new ArrayList<>();
 
     private static final double RAIN_PICKUP_RATE = 0.001;
     private static final double RAIN_RATE = 0.03;
@@ -29,8 +29,8 @@ public class Weather {
 	map.clearRaining();
 
 	final double deltaTime = delta.toMinutes() / 60f;
-	for (int i = getClouds().size() - 1; i >= 0; i--) {
-	    final Cloud cloud = getClouds().get(i);
+	for (int i = clouds.size() - 1; i >= 0; i--) {
+	    final Cloud cloud = clouds.get(i);
 	    cloud.update(delta);
 	    if (!cloud.isRaining()) {
 		for (final CloudPart p : cloud.getParts()) {
@@ -86,7 +86,7 @@ public class Weather {
 		}
 		// To make sure there isn't one lonely piece of the cloud
 		// raining indefinitely
-		final double rainingRatio = rainingCount / cloud.getParts().size();
+		final double rainingRatio = rainingCount / (double) cloud.getParts().size();
 
 		if (rainingRatio <= 0.5) {
 		    for (final CloudPart p : cloud.getParts()) {
@@ -130,9 +130,5 @@ public class Weather {
 
     public List<Cloud> getClouds() {
 	return clouds;
-    }
-
-    public void setClouds(final List<Cloud> clouds) {
-	this.clouds = clouds;
     }
 }

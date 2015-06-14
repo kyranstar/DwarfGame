@@ -12,12 +12,12 @@ import java.util.EventListener;
  */
 public interface PathListener<T extends Node<?>> extends EventListener {
 
-	/**
-	 * Called when a new path is being considered.
-	 *
-	 * @param e
-	 *            the PathEvent that belongs to the PathFinder.
-	 */
-	void considered(PathEvent<T> e);
+    /**
+     * Called when a new path is being considered.
+     *
+     * @param e
+     *            the PathEvent that belongs to the PathFinder.
+     */
+    void considered(PathEvent<T> e);
 
 }

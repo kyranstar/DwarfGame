@@ -7,9 +7,9 @@ import graphics.GameDisplay;
 public class GameMapCreator {
     private static final int BIOME_SCALE = 3;
 
-    MapGenerator<Tile> tileCreator = new TerrainGenerator();
-    MapGenerator<Integer> tempGenerator = new TempGenerator(BIOME_SCALE);
-    MapGenerator<Integer> percipitationGenerator = new PercipitationGenerator(BIOME_SCALE);
+    private final MapGenerator<Tile> tileCreator = new TerrainGenerator();
+    private final MapGenerator<Integer> tempGenerator = new TempGenerator(BIOME_SCALE);
+    private final MapGenerator<Integer> percipitationGenerator = new PercipitationGenerator(BIOME_SCALE);
 
     public GameMap createGameMap(final int width, final int height, final GameDisplay gameDisplay) {
 	final GameMap map = new GameMap(width, height, gameDisplay.getAsciiPanel().getWidthInCharacters(), gameDisplay.getAsciiPanel().getHeightInCharacters());

@@ -18,108 +18,139 @@ import com.google.common.collect.Ordering;
  */
 public class AStar<T extends Node<T>> extends AbstractPathFinder<T> {
 
-	private class State extends NodeState<T> implements Comparable<State> {
+    private class State extends NodeState<T> implements Comparable<State> {
 
-		private final double costFromStart;
-		private final double costToGoal;
+	private final double costFromStart;
+	private final double costToGoal;
 
-		private State(final T node, final double costFromStart, final State parent, final Collection<T> goals) {
-			super(node, parent);
-			this.costFromStart = costFromStart;
-			costToGoal = minimumPathCostEstimate(node, goals);
+	private State(final T node, final double costFromStart, final State parent, final Collection<T> goals) {
+	    super(node, parent);
+	    this.costFromStart = costFromStart;
+	    costToGoal = minimumPathCostEstimate(node, goals);
+	}
+
+	private double minimumPathCostEstimate(final T node, final Collection<T> goals) {
+	    double min = Double.MAX_VALUE;
+	    for (final T goal : goals) {
+		final double cost = node.pathCostEstimate(goal);
+		if (cost < min) {
+		    min = cost;
 		}
+	    }
 
-		private double minimumPathCostEstimate(final T node, final Collection<T> goals) {
-			double min = Double.MAX_VALUE;
-			for (final T goal : goals) {
-				final double cost = node.pathCostEstimate(goal);
-				if (cost < min) {
-					min = cost;
-				}
-			}
+	    return min;
+	}
 
-			return min;
-		}
+	private double totalCost() {
+	    return costFromStart + costToGoal;
+	}
 
-		private double totalCost() {
-			return costFromStart + costToGoal;
-		}
+	@Override
+	public int compareTo(final State other) {
+	    return (int) (totalCost() - other.totalCost());
+	}
+
+	@Override
+	public int hashCode() {
+	    final int prime = 31;
+	    int result = 1;
+	    result = prime * result + getOuterType().hashCode();
+	    long temp;
+	    temp = Double.doubleToLongBits(totalCost());
+	    result = prime * result + (int) (temp ^ temp >>> 32);
+	    return result;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+	    if (this == obj)
+		return true;
+	    if (obj == null)
+		return false;
+	    if (getClass() != obj.getClass())
+		return false;
+	    final State other = (State) obj;
+	    if (!getOuterType().equals(other.getOuterType()))
+		return false;
+	    if (Double.doubleToLongBits(totalCost()) != Double.doubleToLongBits(other.totalCost()))
+		return false;
+	    return true;
+	}
+
+	private AStar getOuterType() {
+	    return AStar.this;
+	}
+
+    }
+
+    @Override
+    public Optional<List<T>> findPath(final Collection<T> graph, final T start, final T goal) {
+	return findPath(graph, start, Collections.singleton(goal));
+    }
+
+    @Override
+    public Optional<List<T>> findPath(final Collection<T> graph, final T start, final Collection<T> goals) {
+	canceled = false;
+	final Map<T, State> open = new HashMap<T, State>();
+	final Map<T, State> closed = new HashMap<T, State>();
+	final State startState = new State(start, 0, null, goals);
+	open.put(start, startState);
+	final Ordering<Map.Entry<T, State>> orderByEntryValue = orderByEntryValue();
+	while (!(open.isEmpty() || canceled)) {
+	    final State state = open.remove(orderByEntryValue.min(open.entrySet()).getKey());
+	    fireConsidered(new PathEvent<T>(this) {
+
+		private static final long serialVersionUID = 1L;
 
 		@Override
-		public int compareTo(final State other) {
-			return (int) (totalCost() - other.totalCost());
+		public List<T> getPath() {
+		    return state.makePath();
 		}
 
-	}
+	    });
+	    if (goals.contains(state.node))
+		return Optional.of(state.makePath());
+	    else {
+		for (final T newNode : state.node.neighbors()) {
+		    final double newCost = state.costFromStart + state.node.traverseCost(newNode);
+		    final State openNode = open.get(newNode);
+		    if (openNode != null && openNode.costFromStart <= newCost) {
+			continue;
+		    }
 
-	@Override
-	public Optional<List<T>> findPath(final Collection<T> graph, final T start, final T goal) {
-		return findPath(graph, start, Collections.singleton(goal));
-	}
+		    final State closedNode = closed.get(newNode);
+		    if (closedNode != null && closedNode.costFromStart <= newCost) {
+			continue;
+		    }
 
-	@Override
-	public Optional<List<T>> findPath(final Collection<T> graph, final T start, final Collection<T> goals) {
-		canceled = false;
-		final Map<T, State> open = new HashMap<T, State>();
-		final Map<T, State> closed = new HashMap<T, State>();
-		final State startState = new State(start, 0, null, goals);
-		open.put(start, startState);
-		final Ordering<Map.Entry<T, State>> orderByEntryValue = orderByEntryValue();
-		while (!(open.isEmpty() || canceled)) {
-			final State state = open.remove(orderByEntryValue.min(open.entrySet()).getKey());
-			fireConsidered(new PathEvent<T>(this) {
+		    if (closedNode != null) {
+			closed.remove(newNode);
+		    }
 
-				private static final long serialVersionUID = 1L;
+		    if (openNode != null) {
+			open.remove(newNode);
+		    }
 
-				@Override
-				public List<T> getPath() {
-					return state.makePath();
-				}
-
-			});
-			if (goals.contains(state.node))
-				return Optional.of(state.makePath());
-			else {
-				for (final T newNode : state.node.neighbors()) {
-					final double newCost = state.costFromStart + state.node.traverseCost(newNode);
-					final State openNode = open.get(newNode);
-					if (openNode != null && openNode.costFromStart <= newCost) {
-						continue;
-					}
-
-					final State closedNode = closed.get(newNode);
-					if (closedNode != null && closedNode.costFromStart <= newCost) {
-						continue;
-					}
-
-					if (closedNode != null) {
-						closed.remove(newNode);
-					}
-
-					if (openNode != null) {
-						open.remove(newNode);
-					}
-
-					final State newState = new State(newNode, newCost, state, goals);
-					open.put(newNode, newState);
-				}
-			}
-
-			closed.put(state.node, state);
+		    final State newState = new State(newNode, newCost, state, goals);
+		    open.put(newNode, newState);
 		}
+	    }
 
-		return Optional.empty();
+	    closed.put(state.node, state);
 	}
 
-	static private <K, V extends Comparable<V>> Ordering<Map.Entry<K, V>> orderByEntryValue() {
-		return new Ordering<Map.Entry<K, V>>() {
+	return Optional.empty();
+    }
 
-			@Override
-			public int compare(final Map.Entry<K, V> o1, final Map.Entry<K, V> o2) {
-				return o1.getValue().compareTo(o2.getValue());
-			}
+    static private <K, V extends Comparable<V>> Ordering<Map.Entry<K, V>> orderByEntryValue() {
+	return new Ordering<Map.Entry<K, V>>() {
 
-		};
-	}
+	    @Override
+	    public int compare(final Map.Entry<K, V> o1, final Map.Entry<K, V> o2) {
+		return o1.getValue().compareTo(o2.getValue());
+	    }
+
+	};
+    }
 
 }

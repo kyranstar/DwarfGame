@@ -3,9 +3,10 @@ package game.entity.dwarf;
 import game.math.MathUtils;
 
 public enum Gender {
-	MALE, FEMALE;
+    MALE,
+    FEMALE;
 
-	public static Gender getRandom() {
-		return Gender.values()[MathUtils.randBetween(0, Gender.values().length)];
-	}
+    public static Gender getRandom() {
+	return Gender.values()[MathUtils.randBetween(0, Gender.values().length)];
+    }
 }

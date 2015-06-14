@@ -10,27 +10,27 @@ package game.pathfinding;
  */
 public interface Node<T extends Node<?>> {
 
-	/**
-	 * Returns the estimate of the cost to get from this node to the goal node.
-	 * If unable to estimate, it is safe to return 0 or underestimate.
-	 * Overestimates can result in failures to find a path.
-	 *
-	 * @return the estimate
-	 */
-	double pathCostEstimate(T goal);
+    /**
+     * Returns the estimate of the cost to get from this node to the goal node.
+     * If unable to estimate, it is safe to return 0 or underestimate.
+     * Overestimates can result in failures to find a path.
+     *
+     * @return the estimate
+     */
+    double pathCostEstimate(T goal);
 
-	/**
-	 * Returns the cost to get from this node to the dest node.
-	 *
-	 * @return the cost
-	 */
-	double traverseCost(T dest);
+    /**
+     * Returns the cost to get from this node to the dest node.
+     *
+     * @return the cost
+     */
+    double traverseCost(T dest);
 
-	/**
-	 * Returns the neighbors of this node.
-	 *
-	 * @return the neighbors
-	 */
-	Iterable<T> neighbors();
+    /**
+     * Returns the neighbors of this node.
+     *
+     * @return the neighbors
+     */
+    Iterable<T> neighbors();
 
 }

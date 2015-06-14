@@ -36,7 +36,7 @@ public class BresenhamPlotter {
      * @param plot
      *            the plot function
      */
-    public static void Line(int x0, int y0, final int x1, final int y1, final BresenhamPlotFunction plot) {
+    public static void line(int x0, int y0, final int x1, final int y1, final BresenhamPlotFunction plot) {
 	final int w = x1 - x0;
 	final int h = y1 - y0;
 	int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0;
@@ -96,7 +96,7 @@ public class BresenhamPlotter {
      *            the end y
      * @return the list of plotted points
      */
-    public static List<Point> Line(int x0, int y0, final int x1, final int y1) {
+    public static List<Point> line(int x0, int y0, final int x1, final int y1) {
 	final List<Point> points = new ArrayList<>();
 	final int w = x1 - x0;
 	final int h = y1 - y0;

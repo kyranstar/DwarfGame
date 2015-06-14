@@ -16,19 +16,19 @@ class NodeState<T extends Node<T>> {
     NodeState<T> previous;
 
     NodeState(T node, NodeState<T> previous) {
-        this.node = node;
-        this.previous = previous;
+	this.node = node;
+	this.previous = previous;
     }
 
     List<T> makePath() {
-        List<T> result = new LinkedList<T>();
-        NodeState<T> s = this;
-        while (s != null) {
-            result.add(0, s.node);
-            s = s.previous;
-        }
+	List<T> result = new LinkedList<T>();
+	NodeState<T> s = this;
+	while (s != null) {
+	    result.add(0, s.node);
+	    s = s.previous;
+	}
 
-        return result;
+	return result;
     }
 
 }

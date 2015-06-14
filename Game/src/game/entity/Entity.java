@@ -5,27 +5,27 @@ import graphics.DrawingLayer;
 
 public abstract class Entity implements Displayable {
 
-	int xPos, yPos;
-	
-	public void setX(final int xPos) {
-		this.xPos = xPos;
-	}
+    int xPos, yPos;
 
-	public void setY(final int yPos) {
-		this.yPos = yPos;
-	}
+    public void setX(final int xPos) {
+	this.xPos = xPos;
+    }
 
-	public int getX() {
-		return xPos;
-	}
+    public void setY(final int yPos) {
+	this.yPos = yPos;
+    }
 
-	public int getY() {
-		return yPos;
-	}
+    public int getX() {
+	return xPos;
+    }
 
-	@Override
-	public DrawingLayer getDrawingLayer() {
-		return DrawingLayer.PRIMARY;
-	}
+    public int getY() {
+	return yPos;
+    }
+
+    @Override
+    public DrawingLayer getDrawingLayer() {
+	return DrawingLayer.PRIMARY;
+    }
 
 }

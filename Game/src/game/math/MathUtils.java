@@ -112,4 +112,28 @@ public final class MathUtils {
 	else
 	    return base - RAND.nextDouble() * variation;
     }
+
+    public static int[][] copyArr(final int[][] arr) {
+	final int[][] newArr = new int[arr.length][];
+
+	for (int i = 0; i < arr.length; i++) {
+	    final int[] row = arr[i];
+	    final int aLength = row.length;
+	    newArr[i] = new int[aLength];
+	    System.arraycopy(row, 0, newArr[i], 0, aLength);
+	}
+	return newArr;
+    }
+
+    public static double[][] copyArr(final double[][] arr) {
+	final double[][] newArr = new double[arr.length][];
+
+	for (int i = 0; i < arr.length; i++) {
+	    final double[] row = arr[i];
+	    final int aLength = row.length;
+	    newArr[i] = new double[aLength];
+	    System.arraycopy(row, 0, newArr[i], 0, aLength);
+	}
+	return newArr;
+    }
 }

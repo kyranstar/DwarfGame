@@ -10,117 +10,105 @@ import javax.imageio.ImageIO;
 
 public class SimplexNoise {
 
-	SimplexNoise_octave[] octaves;
-	double[] frequencys;
-	double[] amplitudes;
+    SimplexNoise_octave[] octaves;
+    double[] frequencys;
+    double[] amplitudes;
 
-	int largestFeature;
-	double persistence;
-	long seed;
+    double persistence;
 
-	public SimplexNoise(final int largestFeature, final double persistence) {
-		this(largestFeature, persistence, System.currentTimeMillis());
+    public SimplexNoise(final int largestFeature, final double persistence) {
+	this(largestFeature, persistence, System.currentTimeMillis());
+    }
+
+    public SimplexNoise(final int largestFeature, final double persistence, final long seed) {
+	this.persistence = persistence;
+
+	// recieves a number (eg 128) and calculates what power of 2 it is (eg
+	// 2^7)
+	final int numberOfOctaves = (int) Math.ceil(Math.log10(largestFeature) / Math.log10(2));
+
+	octaves = new SimplexNoise_octave[numberOfOctaves];
+	frequencys = new double[numberOfOctaves];
+	amplitudes = new double[numberOfOctaves];
+
+	final Random rnd = new Random(seed);
+
+	for (int i = 0; i < numberOfOctaves; i++) {
+	    octaves[i] = new SimplexNoise_octave(rnd.nextInt());
+
+	    frequencys[i] = Math.pow(2, i);
+	    amplitudes[i] = Math.pow(persistence, octaves.length - i);
 	}
 
-	public SimplexNoise(final int largestFeature, final double persistence,
-			final long seed) {
-		this.largestFeature = largestFeature;
-		this.persistence = persistence;
-		this.seed = seed;
+    }
 
-		// recieves a number (eg 128) and calculates what power of 2 it is (eg
-		// 2^7)
-		final int numberOfOctaves = (int) Math.ceil(Math.log10(largestFeature)
-				/ Math.log10(2));
+    public double getNoise(final int x, final int y) {
 
-		octaves = new SimplexNoise_octave[numberOfOctaves];
-		frequencys = new double[numberOfOctaves];
-		amplitudes = new double[numberOfOctaves];
+	double result = 0;
 
-		final Random rnd = new Random(seed);
+	for (int i = 0; i < octaves.length; i++) {
+	    // double frequency = Math.pow(2,i);
+	    // double amplitude = Math.pow(persistence,octaves.length-i);
 
-		for (int i = 0; i < numberOfOctaves; i++) {
-			octaves[i] = new SimplexNoise_octave(rnd.nextInt());
-
-			frequencys[i] = Math.pow(2, i);
-			amplitudes[i] = Math.pow(persistence, octaves.length - i);
-		}
-
+	    result = result + octaves[i].noise(x / frequencys[i], y / frequencys[i]) * amplitudes[i];
 	}
 
-	public double getNoise(final int x, final int y) {
+	return result;
 
-		double result = 0;
+    }
 
-		for (int i = 0; i < octaves.length; i++) {
-			// double frequency = Math.pow(2,i);
-			// double amplitude = Math.pow(persistence,octaves.length-i);
+    public double getNoise(final int x, final int y, final int z) {
 
-			result = result
-					+ octaves[i].noise(x / frequencys[i], y / frequencys[i])
-					* amplitudes[i];
-		}
+	double result = 0;
 
-		return result;
+	for (int i = 0; i < octaves.length; i++) {
+	    final double frequency = Math.pow(2, i);
+	    final double amplitude = Math.pow(persistence, octaves.length - i);
 
+	    result = result + octaves[i].noise(x / frequency, y / frequency, z / frequency) * amplitude;
 	}
 
-	public double getNoise(final int x, final int y, final int z) {
+	return result;
 
-		double result = 0;
+    }
 
-		for (int i = 0; i < octaves.length; i++) {
-			final double frequency = Math.pow(2, i);
-			final double amplitude = Math.pow(persistence, octaves.length - i);
+    public void writeImage(final int width, final int height, final String filename) {
+	final double[][] data = new double[width][height];
 
-			result = result
-					+ octaves[i].noise(x / frequency, y / frequency, z
-							/ frequency) * amplitude;
-		}
-
-		return result;
-
+	for (int i = 0; i < width; i++) {
+	    for (int j = 0; j < height; j++) {
+		data[i][j] = 0.5 * (1 + getNoise(i, j));
+	    }
 	}
 
-	public void writeImage(final int width, final int height,
-			final String filename) {
-		final double[][] data = new double[width][height];
+	// this takes and array of doubles between 0 and 1 and generates a grey
+	// scale image from them
 
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
-				data[i][j] = 0.5 * (1 + getNoise(i, j));
-			}
+	final BufferedImage image = new BufferedImage(data.length, data[0].length, BufferedImage.TYPE_INT_RGB);
+
+	for (int y = 0; y < data[0].length; y++) {
+	    for (int x = 0; x < data.length; x++) {
+		if (data[x][y] > 1) {
+		    data[x][y] = 1;
 		}
-
-		// this takes and array of doubles between 0 and 1 and generates a grey
-		// scale image from them
-
-		final BufferedImage image = new BufferedImage(data.length,
-				data[0].length, BufferedImage.TYPE_INT_RGB);
-
-		for (int y = 0; y < data[0].length; y++) {
-			for (int x = 0; x < data.length; x++) {
-				if (data[x][y] > 1) {
-					data[x][y] = 1;
-				}
-				if (data[x][y] < 0) {
-					data[x][y] = 0;
-				}
-				final Color col = new Color((float) data[x][y],
-						(float) data[x][y], (float) data[x][y]);
-				image.setRGB(x, y, col.getRGB());
-			}
+		if (data[x][y] < 0) {
+		    data[x][y] = 0;
 		}
-
-		try {
-			// retrieve image
-			final File outputfile = new File(filename + ".png");
-			outputfile.createNewFile();
-
-			ImageIO.write(image, "png", outputfile);
-		} catch (final IOException e) {
-			// o no! Blank catches are bad
-			throw new RuntimeException("I didn't handle this very well");
-		}
+		final Color col = new Color((float) data[x][y], (float) data[x][y], (float) data[x][y]);
+		image.setRGB(x, y, col.getRGB());
+	    }
 	}
+
+	try {
+	    // retrieve image
+	    final File outputfile = new File(filename + ".png");
+	    final boolean valid = outputfile.createNewFile();
+	    if (valid) {
+		ImageIO.write(image, "png", outputfile);
+	    }
+	} catch (final IOException e) {
+	    // o no! Blank catches are bad
+	    throw new RuntimeException("I didn't handle this very well");
+	}
+    }
 }

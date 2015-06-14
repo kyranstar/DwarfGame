@@ -1,8 +1,10 @@
 package game.math.units;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
-public abstract class DistanceUnit implements Comparator<DistanceUnit>, Comparable<DistanceUnit> {
+@SuppressWarnings("serial")
+public abstract class DistanceUnit implements Comparator<DistanceUnit>, Comparable<DistanceUnit>, Serializable {
     public abstract double getInCM();
 
     public abstract double getInM();
@@ -25,20 +27,12 @@ public abstract class DistanceUnit implements Comparator<DistanceUnit>, Comparab
 
     @Override
     public int compareTo(final DistanceUnit o) {
-	if (getInCM() < o.getInCM())
-	    return -1;
-	if (getInCM() > o.getInCM())
-	    return 1;
-	return 0;
+	return Double.compare(getInCM(), o.getInCM());
     }
 
     @Override
     public int compare(final DistanceUnit d1, final DistanceUnit d2) {
-	if (d1.getInCM() < d2.getInCM())
-	    return -1;
-	if (d1.getInCM() > d2.getInCM())
-	    return 1;
-	return 0;
+	return Double.compare(d1.getInCM(), d2.getInCM());
     }
 
     @Override
