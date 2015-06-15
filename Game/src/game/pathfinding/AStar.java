@@ -77,7 +77,7 @@ public class AStar<T extends Node<T>> extends AbstractPathFinder<T> {
 	    return true;
 	}
 
-	private AStar getOuterType() {
+	private AStar<T> getOuterType() {
 	    return AStar.this;
 	}
 
@@ -147,6 +147,9 @@ public class AStar<T extends Node<T>> extends AbstractPathFinder<T> {
 
 	    @Override
 	    public int compare(final Map.Entry<K, V> o1, final Map.Entry<K, V> o2) {
+		if (o1 == null)
+		    throw new NullPointerException("o1 can't be null!");
+
 		return o1.getValue().compareTo(o2.getValue());
 	    }
 

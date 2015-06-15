@@ -146,8 +146,9 @@ public class Vec2D extends Point2D.Double {
      * themselves.
      */
     public Vec2D unitVector() {
-	if (getR() != 0)
-	    return new Vec2D(x / getR(), y / getR());
+	double length = getR();
+	if (length != 0)
+	    return new Vec2D(x / length, y / length);
 	return new Vec2D(0, 0);
     }
 

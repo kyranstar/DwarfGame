@@ -16,7 +16,8 @@ public class Tile implements Node<Tile>, Displayable {
     private final int y;
     private int avoidance;
     private boolean blocked;
-    private transient List<Tile> neighbors;
+    // for path finding
+    private final List<Tile> neighbors;
     private final Displayable displayable;
     public final double height;
 

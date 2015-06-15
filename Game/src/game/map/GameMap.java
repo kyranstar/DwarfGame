@@ -162,8 +162,8 @@ public class GameMap {
 		if (cloud.isRaining()) {
 		    c = new Color(255 / 2, 255 / 2, col);
 		}
-		final char character = '#';
-		final AsciiCharacterData data = new AsciiCharacterData(character, Color.WHITE, c);
+		final char cloudCharacter = '#';
+		final AsciiCharacterData data = new AsciiCharacterData(cloudCharacter, Color.WHITE, c);
 		display.setCharacterAt((int) p.getX() - getViewportX(), (int) p.getY() - getViewportY(), DrawingLayer.CLOUDS, data);
 	    }
 	}

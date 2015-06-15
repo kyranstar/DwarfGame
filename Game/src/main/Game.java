@@ -59,21 +59,21 @@ public class Game extends GameLoop {
     @Override
     public void processInput(final Queue<KeyEvent> keyEvents, final Queue<MouseEvent> mouseEvent, final Queue<MouseWheelEvent> mouseWheelEvents) {
 	for (final KeyEvent e : keyEvents) {
-	    if (e instanceof KeyEvent) {
-		switch (e.getKeyCode()) {
-		case KeyEvent.VK_W:
-		    map.setViewportY(map.getViewportY() - 1);
-		    break;
-		case KeyEvent.VK_A:
-		    map.setViewportX(map.getViewportX() - 1);
-		    break;
-		case KeyEvent.VK_S:
-		    map.setViewportY(map.getViewportY() + 1);
-		    break;
-		case KeyEvent.VK_D:
-		    map.setViewportX(map.getViewportX() + 1);
-		    break;
-		}
+	    switch (e.getKeyCode()) {
+	    case KeyEvent.VK_W:
+		map.setViewportY(map.getViewportY() - 1);
+		break;
+	    case KeyEvent.VK_A:
+		map.setViewportX(map.getViewportX() - 1);
+		break;
+	    case KeyEvent.VK_S:
+		map.setViewportY(map.getViewportY() + 1);
+		break;
+	    case KeyEvent.VK_D:
+		map.setViewportX(map.getViewportX() + 1);
+		break;
+	    default:
+		break;
 	    }
 	}
     }

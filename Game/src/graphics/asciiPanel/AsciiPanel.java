@@ -23,82 +23,83 @@ public class AsciiPanel extends JPanel {
     /**
      * The color black (pure black).
      */
-    public static Color black = new Color(0, 0, 0);
+    public static final Color black = new Color(0, 0, 0);
 
     /**
      * The color red.
      */
-    public static Color red = new Color(128, 0, 0);
+    public static final Color red = new Color(128, 0, 0);
 
     /**
      * The color green.
      */
-    public static Color green = new Color(0, 128, 0);
+    public static final Color green = new Color(0, 128, 0);
 
     /**
      * The color yellow.
      */
-    public static Color yellow = new Color(128, 128, 0);
+    public static final Color yellow = new Color(128, 128, 0);
 
     /**
      * The color blue.
      */
-    public static Color blue = new Color(0, 0, 128);
+    public static final Color blue = new Color(0, 0, 128);
 
     /**
      * The color magenta.
      */
-    public static Color magenta = new Color(128, 0, 128);
+    public static final Color magenta = new Color(128, 0, 128);
 
     /**
      * The color cyan.
      */
-    public static Color cyan = new Color(0, 128, 128);
+    public static final Color cyan = new Color(0, 128, 128);
 
     /**
      * The color white (light gray).
      */
-    public static Color white = new Color(192, 192, 192);
+    public static final Color white = new Color(192, 192, 192);
 
     /**
      * A brighter black (dark gray).
      */
-    public static Color brightBlack = new Color(128, 128, 128);
+    public static final Color brightBlack = new Color(128, 128, 128);
 
     /**
      * A brighter red.
      */
-    public static Color brightRed = new Color(255, 0, 0);
+    public static final Color brightRed = new Color(255, 0, 0);
 
     /**
      * A brighter green.
      */
-    public static Color brightGreen = new Color(0, 255, 0);
+    public static final Color brightGreen = new Color(0, 255, 0);
 
     /**
      * A brighter yellow.
      */
-    public static Color brightYellow = new Color(255, 255, 0);
+    public static final Color brightYellow = new Color(255, 255, 0);
 
     /**
      * A brighter blue.
      */
-    public static Color brightBlue = new Color(0, 0, 255);
+    public static final Color brightBlue = new Color(0, 0, 255);
 
     /**
      * A brighter magenta.
      */
-    public static Color brightMagenta = new Color(255, 0, 255);
+    public static final Color brightMagenta = new Color(255, 0, 255);
 
     /**
      * A brighter cyan.
      */
-    public static Color brightCyan = new Color(0, 255, 255);
+    public static final Color brightCyan = new Color(0, 255, 255);
 
     /**
      * A brighter white (pure white).
      */
-    public static Color brightWhite = new Color(255, 255, 255);
+    public static final Color brightWhite = new Color(255, 255, 255);
+
     private Image offscreenBuffer;
     private Graphics offscreenGraphics;
     private final int widthInCharacters;
@@ -416,7 +417,7 @@ public class AsciiPanel extends JPanel {
      * @return this for convenient chaining of method calls
      */
     public AsciiPanel clear(final char character) {
-	if (character < 0 || character >= glyphs.length)
+	if (character >= glyphs.length)
 	    throw new IllegalArgumentException("character " + character + " must be within range [0," + glyphs.length + "].");
 
 	return clear(character, 0, 0, widthInCharacters, heightInCharacters, defaultForegroundColor, defaultBackgroundColor);
@@ -435,7 +436,7 @@ public class AsciiPanel extends JPanel {
      * @return this for convenient chaining of method calls
      */
     public AsciiPanel clear(final char character, final Color foreground, final Color background) {
-	if (character < 0 || character >= glyphs.length)
+	if (character >= glyphs.length)
 	    throw new IllegalArgumentException("character " + character + " must be within range [0," + glyphs.length + "].");
 
 	return clear(character, 0, 0, widthInCharacters, heightInCharacters, foreground, background);
@@ -458,7 +459,7 @@ public class AsciiPanel extends JPanel {
      * @return this for convenient chaining of method calls
      */
     public AsciiPanel clear(final char character, final int x, final int y, final int width, final int height) {
-	if (character < 0 || character >= glyphs.length)
+	if (character >= glyphs.length)
 	    throw new IllegalArgumentException("character " + character + " must be within range [0," + glyphs.length + "].");
 
 	if (x < 0 || x >= widthInCharacters)
@@ -503,7 +504,7 @@ public class AsciiPanel extends JPanel {
      * @return this for convenient chaining of method calls
      */
     public AsciiPanel clear(final char character, final int x, final int y, final int width, final int height, final Color foreground, final Color background) {
-	if (character < 0 || character >= glyphs.length)
+	if (character >= glyphs.length)
 	    throw new IllegalArgumentException("character " + character + " must be within range [0," + glyphs.length + "].");
 
 	if (x < 0 || x >= widthInCharacters)
@@ -541,7 +542,7 @@ public class AsciiPanel extends JPanel {
      * @return this for convenient chaining of method calls
      */
     public AsciiPanel write(final char character) {
-	if (character < 0 || character >= glyphs.length)
+	if (character >= glyphs.length)
 	    throw new IllegalArgumentException("character " + character + " must be within range [0," + glyphs.length + "].");
 
 	return write(character, cursorX, cursorY, defaultForegroundColor, defaultBackgroundColor);
@@ -559,7 +560,7 @@ public class AsciiPanel extends JPanel {
      * @return this for convenient chaining of method calls
      */
     public AsciiPanel write(final char character, final Color foreground) {
-	if (character < 0 || character >= glyphs.length)
+	if (character >= glyphs.length)
 	    throw new IllegalArgumentException("character " + character + " must be within range [0," + glyphs.length + "].");
 
 	return write(character, cursorX, cursorY, foreground, defaultBackgroundColor);
@@ -579,7 +580,7 @@ public class AsciiPanel extends JPanel {
      * @return this for convenient chaining of method calls
      */
     public AsciiPanel write(final char character, final Color foreground, final Color background) {
-	if (character < 0 || character >= glyphs.length)
+	if (character >= glyphs.length)
 	    throw new IllegalArgumentException("character " + character + " must be within range [0," + glyphs.length + "].");
 
 	return write(character, cursorX, cursorY, foreground, background);
@@ -598,7 +599,7 @@ public class AsciiPanel extends JPanel {
      * @return this for convenient chaining of method calls
      */
     public AsciiPanel write(final char character, final int x, final int y) {
-	if (character < 0 || character >= glyphs.length)
+	if (character >= glyphs.length)
 	    throw new IllegalArgumentException("character " + character + " must be within range [0," + glyphs.length + "].");
 
 	if (x < 0 || x >= widthInCharacters)
@@ -626,7 +627,7 @@ public class AsciiPanel extends JPanel {
      * @return this for convenient chaining of method calls
      */
     public AsciiPanel write(final char character, final int x, final int y, final Color foreground) {
-	if (character < 0 || character >= glyphs.length)
+	if (character >= glyphs.length)
 	    throw new IllegalArgumentException("character " + character + " must be within range [0," + glyphs.length + "].");
 
 	if (x < 0 || x >= widthInCharacters)
@@ -656,7 +657,7 @@ public class AsciiPanel extends JPanel {
      * @return this for convenient chaining of method calls
      */
     public AsciiPanel write(final char character, final int x, final int y, Color foreground, Color background) {
-	if (character < 0 || character >= glyphs.length)
+	if (character >= glyphs.length)
 	    throw new IllegalArgumentException("character " + character + " must be within range [0," + glyphs.length + "].");
 
 	if (x < 0 || x >= widthInCharacters)

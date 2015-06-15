@@ -2,11 +2,15 @@ package main;
 
 import graphics.GameDisplay;
 
+import java.awt.HeadlessException;
+import java.lang.reflect.InvocationTargetException;
+
 import javax.swing.JFrame;
 
 public class Main {
 
-    public static void main(final String[] args) {
+    public static void main(final String[] args) throws HeadlessException, InvocationTargetException, InterruptedException {
+
 	final JFrame frame = new JFrame();
 	final GameDisplay display = new GameDisplay(78, 44);
 	frame.add(display);

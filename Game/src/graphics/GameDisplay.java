@@ -28,8 +28,8 @@ public class GameDisplay extends JLayeredPane {
 	backgroundPanel.add(console.scrollPane, BorderLayout.EAST);
 	backgroundPanel.setBounds(0, 0, backgroundPanel.getPreferredSize().width, backgroundPanel.getPreferredSize().height);
 
-	this.add(backgroundPanel, new Integer(0));
-	this.add(displayHighlighter, new Integer(1));
+	this.add(backgroundPanel, Integer.valueOf(0));
+	this.add(displayHighlighter, Integer.valueOf(1));
 
 	setPreferredSize(new Dimension(backgroundPanel.getPreferredSize().width, backgroundPanel.getPreferredSize().height));
 
