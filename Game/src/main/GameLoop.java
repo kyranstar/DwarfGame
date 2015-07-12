@@ -4,12 +4,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-public abstract class GameLoop implements KeyListener, MouseListener, MouseWheelListener {
+public abstract class GameLoop implements KeyListener, MouseListener, MouseWheelListener, MouseMotionListener {
     private int UPDATES_PER_SECOND;
     private int FRAMES_PER_SECOND;
     private boolean running = true;
@@ -46,7 +47,6 @@ public abstract class GameLoop implements KeyListener, MouseListener, MouseWheel
 	long elapsed;
 	long wait;
 	long lastUpdateTime = System.currentTimeMillis();
-	int updatesThisSecond = 0;
 
 	while (running) {
 	    start = System.nanoTime();
@@ -65,7 +65,6 @@ public abstract class GameLoop implements KeyListener, MouseListener, MouseWheel
 	    if (System.currentTimeMillis() > lastUpdateTime + targetUpdateTime) {
 		lastUpdateTime = System.currentTimeMillis();
 		update();
-		updatesThisSecond++;
 	    }
 	    draw();
 	    // Take account for the time it took to draw
@@ -79,16 +78,14 @@ public abstract class GameLoop implements KeyListener, MouseListener, MouseWheel
 		// runningFPS is how many frames we processed last second
 		runningFPS = currentFPS;
 		currentFPS = 0;
-		updatesThisSecond = 0;
 		counterstart = System.nanoTime();
 	    }
 
-	    // dont wanna wait for negative time
+	    // don't want to wait for negative time
 	    if (wait > 0) {
 		try {
 		    Thread.sleep(wait);
 		} catch (final InterruptedException e) {
-		    // TODO Auto-generated catch block
 		    e.printStackTrace();
 		}
 	    }
@@ -145,6 +142,13 @@ public abstract class GameLoop implements KeyListener, MouseListener, MouseWheel
     }
 
     @Override
+    public void mouseDragged(final MouseEvent e) {
+	synchronized (mouseEvents) {
+	    mouseEvents.add(e);
+	}
+    }
+
+    @Override
     public void keyPressed(final KeyEvent e) {
 	synchronized (keyEvents) {
 	    keyEvents.add(e);
@@ -162,7 +166,6 @@ public abstract class GameLoop implements KeyListener, MouseListener, MouseWheel
     public void keyTyped(final KeyEvent e) {
 	synchronized (keyEvents) {
 	    keyEvents.add(e);
-
 	}
     }
 
@@ -171,5 +174,11 @@ public abstract class GameLoop implements KeyListener, MouseListener, MouseWheel
 	synchronized (mouseWheelEvents) {
 	    mouseWheelEvents.add(e);
 	}
+    }
+
+    @Override
+    public void mouseMoved(final MouseEvent e) {
+	// TODO Auto-generated method stub
+
     }
 }

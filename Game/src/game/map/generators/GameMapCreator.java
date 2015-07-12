@@ -15,7 +15,7 @@ public class GameMapCreator {
 	final GameMap map = new GameMap(width, height, gameDisplay.getAsciiPanel().getWidthInCharacters(), gameDisplay.getAsciiPanel().getHeightInCharacters());
 	final Tile[][] tiles = tileCreator.generate(width, height);
 	final Integer[][] temperature = tempGenerator.generate(width, height);
-	final Integer[][] percipitation = tempGenerator.generate(width, height);
+	final Integer[][] percipitation = percipitationGenerator.generate(width, height);
 	for (int x = 0; x < tiles.length; x++) {
 	    for (int y = 0; y < tiles[0].length; y++) {
 		map.setBackgroundTile(x, y, tiles[x][y]);

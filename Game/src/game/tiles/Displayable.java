@@ -1,6 +1,7 @@
 package game.tiles;
 
 import graphics.DrawingLayer;
+import graphics.asciiPanel.AsciiCharacterData;
 
 import java.awt.Color;
 
@@ -33,6 +34,10 @@ public interface Displayable {
     public Color getForeground();
 
     public Color getBackground();
+
+    public default AsciiCharacterData getData() {
+	return new AsciiCharacterData(getCharacter(), getForeground(), getBackground());
+    }
 
     public DrawingLayer getDrawingLayer();
 

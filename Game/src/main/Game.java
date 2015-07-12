@@ -16,6 +16,8 @@ import java.awt.event.MouseWheelEvent;
 import java.time.Duration;
 import java.util.Queue;
 
+import javax.swing.SwingUtilities;
+
 public class Game extends GameLoop {
 
     private final Display display;
@@ -36,6 +38,7 @@ public class Game extends GameLoop {
 
 	gameDisplay.addKeyListener(this);
 	gameDisplay.addMouseListener(this);
+	gameDisplay.addMouseMotionListener(this);
 
 	map = new GameMapCreator().createGameMap(display.getWidth() * 4, display.getHeight() * 4, gameDisplay);
 
@@ -57,7 +60,7 @@ public class Game extends GameLoop {
     }
 
     @Override
-    public void processInput(final Queue<KeyEvent> keyEvents, final Queue<MouseEvent> mouseEvent, final Queue<MouseWheelEvent> mouseWheelEvents) {
+    public void processInput(final Queue<KeyEvent> keyEvents, final Queue<MouseEvent> mouseEvents, final Queue<MouseWheelEvent> mouseWheelEvents) {
 	for (final KeyEvent e : keyEvents) {
 	    switch (e.getKeyCode()) {
 	    case KeyEvent.VK_W:
@@ -72,10 +75,14 @@ public class Game extends GameLoop {
 	    case KeyEvent.VK_D:
 		map.setViewportX(map.getViewportX() + 1);
 		break;
-	    default:
-		break;
 	    }
 	}
+	for (final MouseEvent e : mouseEvents) {
+	    if (SwingUtilities.isLeftMouseButton(e)) {
+		highlighter.highlightTile(DisplayHighlighter.createHighlight(map.screenPixelXToTile(e.getX()), map.screenPixelYToTile(e.getY())));
+	    }
+	}
+
     }
 
     @Override
